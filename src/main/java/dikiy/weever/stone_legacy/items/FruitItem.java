@@ -14,31 +14,31 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class FruitItem extends Item {
+    public static final String NBT_ACTIVATION_KEY = "Stonefied";
     public FruitItem(Properties properties) {
-
         super(properties);
     }
 
-
     public static void setStoneTexture(ItemStack stack) {
-        stack.getTag().putByte("Stonefied", (byte)22);
+        stack.getTag().putByte(NBT_ACTIVATION_KEY, (byte)22);
     }
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
         CompoundNBT tag = stack.getTag();
-        StoneLegacyAddon.getLogger().debug(tag.getByte("Stonefied"));
-        // FIXME related to ClientSetup
-        byte textureTicks = tag.getByte("Stonefied");
-        if ((entity instanceof LivingEntity &&
-                ((LivingEntity) entity).getItemInHand(Hand.MAIN_HAND).getItem() instanceof FruitItem ||
-                ((LivingEntity) entity).getItemInHand(Hand.OFF_HAND).getItem() instanceof FruitItem) &&
-        textureTicks < 23) {
-            tag.putByte("Stonefied", textureTicks);
-            ++textureTicks;
-        } else if (textureTicks > 0) {
-            tag.putByte("Stonefied", textureTicks);
-            --textureTicks;
+        System.out.println(world.isClientSide());
+        if (tag != null) {
+            byte textureTicks = tag.getByte(NBT_ACTIVATION_KEY);
+            if ((entity instanceof LivingEntity &&
+                    ((LivingEntity) entity).getItemInHand(Hand.MAIN_HAND).getItem() instanceof FruitItem ||
+                    ((LivingEntity) entity).getItemInHand(Hand.OFF_HAND).getItem() instanceof FruitItem) &&
+                    textureTicks < 23) {
+                tag.putByte(NBT_ACTIVATION_KEY, textureTicks);
+                ++textureTicks;
+            } else if (textureTicks > 0) {
+                tag.putByte(NBT_ACTIVATION_KEY, textureTicks);
+                --textureTicks;
+            }
         }
     }
 }
