@@ -1,5 +1,6 @@
 package dikiy.weever.stone_legacy;
 
+import dikiy.weever.stone_legacy.init.InitItems;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -13,6 +14,8 @@ public class StoneLegacyAddon {
 
     public StoneLegacyAddon() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        InitItems.ITEMS.register(modEventBus);
     }
 
     public static Logger getLogger() {
