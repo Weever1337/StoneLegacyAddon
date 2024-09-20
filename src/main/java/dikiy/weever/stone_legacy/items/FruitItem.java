@@ -1,17 +1,16 @@
 package dikiy.weever.stone_legacy.items;
 
-import dikiy.weever.stone_legacy.StoneLegacyAddon;
+import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
+import com.github.standobyte.jojo.power.IPower;
+import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.item.UseAction;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class FruitItem extends Item {
     public FruitItem(Properties properties) {
@@ -19,6 +18,30 @@ public class FruitItem extends Item {
         super(properties);
     }
 
+    @Override
+    public UseAction getUseAnimation(ItemStack stack) {
+        return UseAction.EAT;
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity) {
+        if (!world.isClientSide()) {
+            if (entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative()) {
+                if (entity.getHealth() <= entity.getMaxHealth() / 2) {
+                    entity.hurt(ASPHYXIA, entity.getMaxHealth() / 2);
+                    return stack;
+                }
+                if (!((PlayerEntity) entity).isCreative()) entity.hurt(ASPHYXIA, entity.getMaxHealth() / 2);
+                INonStandPower.getNonStandPowerOptional(entity).ifPresent(power -> {
+                    power.clear();
+                    power.givePower(ModPowers.PILLAR_MAN.get());
+                });
+                stack.shrink(1);
+                return super.finishUsingItem(stack, world, entity);
+            }
+        }
+        return stack;
+    }
 
     public byte getStage(ItemStack stack) {
         return stack.getOrCreateTag().getByte("Stonefied");
@@ -83,4 +106,5 @@ public class FruitItem extends Item {
 //            --textureTicks;
 //        }
 //    }
+    public static final DamageSource ASPHYXIA = new DamageSource("asphyxia").bypassArmor().bypassMagic().bypassInvul();
 }
