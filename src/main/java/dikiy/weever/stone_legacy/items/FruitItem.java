@@ -42,7 +42,7 @@ public class FruitItem extends Item {
         return stack;
     }
 
-    public byte getStage(ItemStack stack) {
+    public static byte getStage(ItemStack stack) {
         return stack.getOrCreateTag().getByte("Stonefied");
     }
 
