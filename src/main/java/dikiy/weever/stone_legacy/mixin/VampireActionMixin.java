@@ -70,8 +70,11 @@ public class VampireActionMixin extends VampirismAction {
     private void stoneLegacyAddon$giveZombie(INonStandPower nonPower, UUID ownerUUID) {
         LivingEntity user = nonPower.getUser();
         user.getCapability(ZombieUtilProvider.CAPABILITY).ifPresent(cap -> cap.setOwnerUUID(ownerUUID));
+        float previousEnergy = nonPower.getEnergy();
+        float previousMaxEnergy = nonPower.getMaxEnergy();
         nonPower.clear();
         nonPower.givePower(ModPowers.ZOMBIE.get());
+        nonPower.setEnergy((float) (Math.pow(1.6* previousEnergy, 1.8) / Math.pow(previousMaxEnergy, 2)));
         MCUtil.onEntityResurrect(user);
         user.setHealth(2f);
     }

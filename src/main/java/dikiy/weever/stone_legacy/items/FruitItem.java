@@ -1,5 +1,6 @@
 package dikiy.weever.stone_legacy.items;
 
+import com.github.standobyte.jojo.init.ModStatusEffects;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import net.minecraft.entity.Entity;
@@ -22,20 +23,26 @@ public class FruitItem extends Item {
         return UseAction.EAT;
     }
 
+
+
     @Override
     public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity) {
         if (!world.isClientSide()) {
-            if (entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative()) {
-                if (entity.getHealth() <= entity.getMaxHealth() / 2) {
-                    entity.hurt(ASPHYXIA, entity.getMaxHealth() / 2);
+            if (entity instanceof PlayerEntity) {
+                if (entity.getEffect(ModStatusEffects.BLEEDING.get()) != null &&
+                        entity.getHealth() <= (entity.getMaxHealth() + (entity.getEffect(ModStatusEffects.BLEEDING.get()).getAmplifier() * 2)) / 2 &&
+                        !((PlayerEntity) entity).isCreative()) {
+                    entity.hurt(ASPHYXIA, entity.getHealth());
                     return stack;
                 }
-                if (!((PlayerEntity) entity).isCreative()) entity.hurt(ASPHYXIA, entity.getMaxHealth() / 2);
+                if (!((PlayerEntity) entity).isCreative()) {
+                    entity.hurt(ASPHYXIA, entity.getMaxHealth() / 2);
+                    stack.shrink(1);
+                }
                 INonStandPower.getNonStandPowerOptional(entity).ifPresent(power -> {
                     power.clear();
                     power.givePower(ModPowers.PILLAR_MAN.get());
                 });
-                stack.shrink(1);
                 return super.finishUsingItem(stack, world, entity);
             }
         }
@@ -59,7 +66,7 @@ public class FruitItem extends Item {
         if (offHandStack.getItem() instanceof FruitItem) {
             currentStack = offHandStack;
         }
-        if (stack != currentStack) {
+        if (stack != handStack && stack != offHandStack) {
             byte stage = getStage(stack);
             if (stage > 0) {
                 stage--;
@@ -69,11 +76,14 @@ public class FruitItem extends Item {
         int eatDuration = item.getUseDuration(stack);
         int lightLevel = livingEntity.level.getLightEmission(livingEntity.getEntity().blockPosition());
         float lightMultiplier = lightLevel == 0 ? eatDuration - 1 : (float) ((eatDuration - 2) / lightLevel) / 2;
-        if (currentStack != null) {
-            byte stage = getStage(currentStack);
-            if (stage < 21) {
-                stage++;
-                currentStack.getTag().putByte("Stonefied", stage);
+        ItemStack[] hands = {handStack, offHandStack};
+        for (int i = 0; i < 2; i++) {
+            if (hands[i] != null) {
+                byte stage = getStage(hands[i]);
+                if (stage < 21) {
+                    stage++;
+                    hands[i].getTag().putByte("Stonefied", stage);
+                }
             }
         }
     }
