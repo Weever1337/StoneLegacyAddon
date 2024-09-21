@@ -29,10 +29,10 @@ public class FruitHandler {
         if (entity instanceof ItemEntity) {
             ItemStack itemStack = ((ItemEntity) entity).getItem();
             if (itemStack.getItem() instanceof FruitItem) {
-                byte stage = FruitItem.getStage(itemStack);
+                int stage = FruitItem.getStage(itemStack);
                 if (stage > 0) {
                     stage--;
-                    itemStack.getTag().putByte("Stonefied", stage);
+                    itemStack.getTag().putInt("Stonefied", stage);
                 }
             }
         }

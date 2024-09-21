@@ -21,7 +21,9 @@ public class ClientSetup {
     @SubscribeEvent
     public static void onFMLClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            ItemModelsProperties.register(InitItems.FRUIT.get(), new ResourceLocation(StoneLegacyAddon.MOD_ID, "stage"), (itemStack, clientWorld, livingEntity) -> livingEntity != null ? itemStack.getOrCreateTag().getByte("Stonefied"): 0);
+            ItemModelsProperties.register(InitItems.FRUIT.get(), new ResourceLocation(StoneLegacyAddon.MOD_ID, "stage"),
+                    (itemStack, clientWorld, livingEntity) -> livingEntity != null ?
+                            itemStack.getOrCreateTag().getInt("Stonefied"): 0);
         });
     }
 }

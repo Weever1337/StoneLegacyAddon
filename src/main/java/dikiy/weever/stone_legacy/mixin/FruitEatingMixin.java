@@ -41,7 +41,7 @@ public abstract class FruitEatingMixin extends Entity {
 
     @Inject(method = "triggerItemUseEffects(Lnet/minecraft/item/ItemStack;I)V", at = @At(value = "HEAD", target = "Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/LivingEntity.isUsingItem()Z"), cancellable = true)
     public void getHurtSoundAndAnimation(ItemStack stack, int randomValue, CallbackInfo ci) {
-        if (stack.getItem() == InitItems.FRUIT.get() && this.isUsingItem() && FruitItem.getStage(stack) == 21) {
+        if (stack.getItem() == InitItems.FRUIT.get() && this.isUsingItem() && FruitItem.getStage(stack) == 630) {
             this.spawnItemParticles(stack, 1);
             if (!(this.getEffect(Effects.DAMAGE_RESISTANCE) != null || (this.getEntity() instanceof PlayerEntity && ((PlayerEntity) this.getEntity()).isCreative()))) {
                 this.playSound(SoundEvents.PLAYER_HURT, 0.5F + 0.5F * (float) this.random.nextInt(2), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
@@ -54,7 +54,7 @@ public abstract class FruitEatingMixin extends Entity {
 
     @Inject(method="spawnItemParticles(Lnet/minecraft/item/ItemStack;I)V", at = @At(value = "HEAD"), cancellable = true)
     public void spawnTeethParticles(ItemStack stack, int particles, CallbackInfo ci) {
-        if (stack.getItem() instanceof FruitItem && FruitItem.getStage(stack) == 21) {
+        if (stack.getItem() instanceof FruitItem && FruitItem.getStage(stack) == 630) {
             for(int i = 0; i < particles; ++i) {
                 Vector3d vector3d = new Vector3d(((double)this.random.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
                 vector3d = vector3d.xRot(-this.xRot * ((float)Math.PI / 180F));

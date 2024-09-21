@@ -3,6 +3,7 @@ package dikiy.weever.stone_legacy.items;
 import com.github.standobyte.jojo.init.ModStatusEffects;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
+import dikiy.weever.stone_legacy.StoneLegacyAddon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,40 +50,41 @@ public class FruitItem extends Item {
         return stack;
     }
 
-    public static byte getStage(ItemStack stack) {
-        return stack.getOrCreateTag().getByte("Stonefied");
+    public static int getStage(ItemStack stack) {
+        return stack.getOrCreateTag().getInt("Stonefied");
     }
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+        if (!world.isClientSide()) {
         LivingEntity livingEntity = (LivingEntity) entity;
         ItemStack handStack = livingEntity.getItemInHand(Hand.MAIN_HAND);
         ItemStack offHandStack = livingEntity.getItemInHand(Hand.OFF_HAND);
         FruitItem item = (FruitItem) stack.getItem();
-        ItemStack currentStack = null;
-        if (handStack.getItem() instanceof FruitItem) {
-            currentStack = handStack;
-        }
-        if (offHandStack.getItem() instanceof FruitItem) {
-            currentStack = offHandStack;
-        }
         if (stack != handStack && stack != offHandStack) {
-            byte stage = getStage(stack);
+            int stage = getStage(stack);
             if (stage > 0) {
-                stage--;
-                stack.getTag().putByte("Stonefied", stage);
+                stage -= 30;
+                stack.getTag().putInt("Stonefied", stage);
             }
         }
         int eatDuration = item.getUseDuration(stack);
-        int lightLevel = livingEntity.level.getLightEmission(livingEntity.getEntity().blockPosition());
-        float lightMultiplier = lightLevel == 0 ? eatDuration - 1 : (float) ((eatDuration - 2) / lightLevel) / 2;
+        float lightLevel = 6.0F;
+        if (world.dimensionType().hasSkyLight()
+                && !world.dimensionType().hasCeiling()
+                && world.isDay()
+                && !world.isRaining()
+                && !world.isThundering()) {
+            lightLevel = 15 * livingEntity.getBrightness() >= 6? 15 * livingEntity.getBrightness(): 6.0F;
+        }
+        System.out.println(lightLevel);
+        float lightDelay = lightLevel == 0 ? eatDuration - 2 : ((eatDuration - 2) / lightLevel) / 2;
         ItemStack[] hands = {handStack, offHandStack};
-        for (int i = 0; i < 2; i++) {
-            if (hands[i] != null) {
-                byte stage = getStage(hands[i]);
-                if (stage < 21) {
-                    stage++;
-                    hands[i].getTag().putByte("Stonefied", stage);
+            for (int i = 0; i < 2; i++) {
+                if (hands[i] != null) {
+                    int stage = getStage(hands[i]);
+                    stage = (stage >= 630) ? 630 : stage + (int) ((30 / lightDelay) * 6);
+                    hands[i].getTag().putInt("Stonefied", stage);
                 }
             }
         }
