@@ -77,7 +77,6 @@ public class FruitItem extends Item {
                 && !world.isThundering()) {
             lightLevel = 15 * livingEntity.getBrightness() >= 6? 15 * livingEntity.getBrightness(): 6.0F;
         }
-        System.out.println(lightLevel);
         float lightDelay = lightLevel == 0 ? eatDuration - 2 : ((eatDuration - 2) / lightLevel) / 2;
         ItemStack[] hands = {handStack, offHandStack};
             for (int i = 0; i < 2; i++) {

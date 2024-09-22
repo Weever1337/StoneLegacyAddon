@@ -1,0 +1,16 @@
+{
+  "type": "stone_legacy:additional_single_item",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/abandoned_mineshaft"
+    },
+    {
+      "condition": "random_chance",
+      "chance": 0.05
+    }
+  ],
+  "additional_item": {
+    "name": "stone_legacy:fruit"
+  }
+}

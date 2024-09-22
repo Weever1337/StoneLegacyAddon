@@ -1,6 +1,7 @@
 package dikiy.weever.stone_legacy;
 
 import dikiy.weever.stone_legacy.capability.CapabilityHandler;
+import dikiy.weever.stone_legacy.init.AddonLootModifierSerializers;
 import dikiy.weever.stone_legacy.init.InitItems;
 import dikiy.weever.stone_legacy.network.AddonPackets;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -18,6 +19,7 @@ public class StoneLegacyAddon {
     public StoneLegacyAddon() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         InitItems.ITEMS.register(modEventBus);
+        AddonLootModifierSerializers.LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
         modEventBus.addListener(this::preInit);
     }
 
