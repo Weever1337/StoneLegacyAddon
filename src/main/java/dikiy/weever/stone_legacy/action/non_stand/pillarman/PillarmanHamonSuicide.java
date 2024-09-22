@@ -47,7 +47,7 @@ public class PillarmanHamonSuicide extends PillarmanAction {
                 DamageUtil.dealHamonDamage(user, 4, user, null);
             }
             if (ticksHeld == 30) {
-                user.addEffect(new EffectInstance(ModStatusEffects.HAMON_SPREAD.get(), 100, 1));
+                user.addEffect(new EffectInstance(ModStatusEffects.HAMON_SPREAD.get(), 100, 1, false, false, true));
             }
         }
     }
