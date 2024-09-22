@@ -44,17 +44,7 @@ public class CapabilityHandler {
 
     @SubscribeEvent
     public static void syncWithNewPlayer(PlayerEvent.StartTracking event) {
-        Entity entityTracked = event.getTarget();
-        ServerPlayerEntity trackingPlayer = (ServerPlayerEntity) event.getPlayer();
-        if (entityTracked instanceof LivingEntity) {
-            entityTracked.getCapability(ZombieUtilProvider.CAPABILITY).ifPresent(ZombieUtilCap -> {
-                ZombieUtilCap.syncWithAnyPlayer(trackingPlayer);
-            });
-
-            entityTracked.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent(PillarmanUtilCap -> {
-                PillarmanUtilCap.syncWithAnyPlayer(trackingPlayer);
-            });
-        }
+        syncAttachedData(event.getPlayer());
     }
 
     @SubscribeEvent
@@ -72,6 +62,18 @@ public class CapabilityHandler {
         syncAttachedData(event.getPlayer());
     }
 
+    @SubscribeEvent
+    public static void onEntityTracking(PlayerEvent.StartTracking event) {
+        Entity entityTracked = event.getTarget();
+        ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+        if (entityTracked instanceof LivingEntity) {
+            LivingEntity livingTracked = (LivingEntity) entityTracked;
+            livingTracked.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent(data -> {
+                data.onTracking(player);
+            });
+        }
+    }
+
     private static void syncAttachedData(PlayerEntity player) {
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
         player.getCapability(ZombieUtilProvider.CAPABILITY).ifPresent(data -> {
@@ -80,8 +82,8 @@ public class CapabilityHandler {
         });
 
         player.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent(data -> {
-            data.syncWithEntityOnly(serverPlayer);
             data.syncWithAnyPlayer(serverPlayer);
+            data.syncWithClient();
         });
     }
 }

@@ -16,7 +16,6 @@ public class PillarmanUtilCap implements INBTSerializable<CompoundNBT> {
         this.entity = entity;
     }
 
-
     public void sethamonUser(boolean hamonUser) {
         this.hamonUser = hamonUser;
         if (!entity.level.isClientSide()) {
@@ -29,11 +28,18 @@ public class PillarmanUtilCap implements INBTSerializable<CompoundNBT> {
     }
 
     public void syncWithAnyPlayer(ServerPlayerEntity player) {
-        AddonPackets.sendToClientsTrackingAndSelf(new TrPillarmanDataPacket(entity.getId(), hamonUser), entity);
+        AddonPackets.sendToClient(new TrPillarmanDataPacket(entity.getId(), hamonUser), player);
     }
 
-    public void syncWithEntityOnly(ServerPlayerEntity player) {
-        AddonPackets.sendToClientsTrackingAndSelf(new TrPillarmanDataPacket(entity.getId(), hamonUser), entity);
+    public void onTracking(ServerPlayerEntity tracking) {
+        AddonPackets.sendToClient(new TrPillarmanDataPacket(entity.getId(), hamonUser), tracking);
+    }
+
+    public void syncWithClient() {
+        if (entity instanceof ServerPlayerEntity) {
+            ServerPlayerEntity player = (ServerPlayerEntity) entity;
+            AddonPackets.sendToClient(new TrPillarmanDataPacket(entity.getId(), hamonUser), player);
+        }
     }
 
     @Override
