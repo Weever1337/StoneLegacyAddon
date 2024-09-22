@@ -1,5 +1,11 @@
 package dikiy.weever.stone_legacy.capability;
 
+import com.github.standobyte.jojo.JojoMod;
+import com.github.standobyte.jojo.capability.entity.LivingUtilCapProvider;
+import com.github.standobyte.jojo.capability.entity.PlayerUtilCapProvider;
+import com.github.standobyte.jojo.power.IPower;
+import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
+import com.github.standobyte.jojo.power.impl.stand.IStandPower;
 import dikiy.weever.stone_legacy.StoneLegacyAddon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -11,6 +17,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -60,6 +67,27 @@ public class CapabilityHandler {
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         syncAttachedData(event.getPlayer());
+    }
+
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        PlayerEntity original = event.getOriginal();
+        PlayerEntity player = event.getPlayer();
+        cloneCap(IStandPower.getStandPowerOptional(original), IStandPower.getStandPowerOptional(player), event.isWasDeath(), "non-Stand capability");
+        original.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent((oldCap) -> {
+            player.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent((newCap) -> {
+                newCap.onClone(oldCap, event.isWasDeath());
+            });
+        });
+    }
+
+    private static <T extends IPower<T, ?>> void cloneCap(LazyOptional<T> oldCap, LazyOptional<T> newCap, boolean wasDeath, String warning) {
+        if (oldCap.isPresent() && newCap.isPresent()) {
+            ((IPower)newCap.resolve().get()).onClone((IPower)oldCap.resolve().get(), wasDeath);
+        } else {
+            JojoMod.getLogger().warn("Failed to copy  data!");
+        }
+
     }
 
     @SubscribeEvent

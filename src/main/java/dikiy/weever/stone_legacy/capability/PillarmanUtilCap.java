@@ -1,5 +1,6 @@
 package dikiy.weever.stone_legacy.capability;
 
+import com.github.standobyte.jojo.capability.entity.PlayerUtilCap;
 import dikiy.weever.stone_legacy.network.AddonPackets;
 import dikiy.weever.stone_legacy.network.server.TrPillarmanDataPacket;
 import net.minecraft.entity.LivingEntity;
@@ -30,7 +31,9 @@ public class PillarmanUtilCap implements INBTSerializable<CompoundNBT> {
     public void syncWithAnyPlayer(ServerPlayerEntity player) {
         AddonPackets.sendToClient(new TrPillarmanDataPacket(entity.getId(), hamonUser), player);
     }
-
+    public void onClone(PillarmanUtilCap old, boolean wasDeath) {
+        this.hamonUser = old.hamonUser;
+    }
     public void onTracking(ServerPlayerEntity tracking) {
         AddonPackets.sendToClient(new TrPillarmanDataPacket(entity.getId(), hamonUser), tracking);
     }
