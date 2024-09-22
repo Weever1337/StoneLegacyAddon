@@ -17,19 +17,19 @@ import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = StoneLegacyAddon.MOD_ID)
 public class ZombieHandler {
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onHurt(LivingHurtEvent event) {
-        LivingEntity hurtEntity = event.getEntityLiving();
-        DamageSource damageSource = event.getSource();
-        Entity damageEntity = damageSource.getEntity();
-        if (hurtEntity instanceof PlayerEntity && damageEntity instanceof LivingEntity) {
-            PlayerEntity player = getPlayerFromDamageEntity(damageEntity);
-            if (player != null && Objects.equals(player.getCapability(ZombieUtilProvider.CAPABILITY).map(ZombieUtilCap::getOwnerUUID).orElse(null), hurtEntity.getUUID())) {
-                event.setAmount(0);
-                event.setCanceled(true);
-            }
-        }
-    }
+//    @SubscribeEvent(priority = EventPriority.HIGHEST)
+//    public static void onHurt(LivingHurtEvent event) {
+//        LivingEntity hurtEntity = event.getEntityLiving();
+//        DamageSource damageSource = event.getSource();
+//        Entity damageEntity = damageSource.getEntity();
+//        if (hurtEntity instanceof PlayerEntity && damageEntity instanceof LivingEntity) {
+//            PlayerEntity player = getPlayerFromDamageEntity(damageEntity);
+//            if (player != null && Objects.equals(player.getCapability(ZombieUtilProvider.CAPABILITY).map(ZombieUtilCap::getOwnerUUID).orElse(null), hurtEntity.getUUID()) && player != hurtEntity) {
+//                event.setAmount(0);
+//                event.setCanceled(true);
+//            }
+//        }
+//    }
 
     private static PlayerEntity getPlayerFromDamageEntity(Entity damageEntity) {
         return damageEntity instanceof StandEntity ? (PlayerEntity) ((StandEntity) damageEntity).getUser() : damageEntity instanceof PlayerEntity ? (PlayerEntity) damageEntity : null;

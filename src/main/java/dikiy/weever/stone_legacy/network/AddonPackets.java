@@ -2,6 +2,7 @@ package dikiy.weever.stone_legacy.network;
 
 import com.github.standobyte.jojo.network.packets.IModPacketHandler;
 import dikiy.weever.stone_legacy.StoneLegacyAddon;
+import dikiy.weever.stone_legacy.network.server.TrPillarmanDataPacket;
 import dikiy.weever.stone_legacy.network.server.TrSetOwnerUUIDPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -27,6 +28,7 @@ public class AddonPackets {
                 .networkProtocolVersion(() -> PROTOCOL_VERSION)
                 .simpleChannel();
         registerMessage(channel, new TrSetOwnerUUIDPacket.Handler(), Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        registerMessage(channel, new TrPillarmanDataPacket.Handler(), Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     private static <MSG> void registerMessage(SimpleChannel channel, IModPacketHandler<MSG> handler, Optional<NetworkDirection> networkDirection) {

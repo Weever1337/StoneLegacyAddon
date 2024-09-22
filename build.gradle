@@ -73,12 +73,19 @@ repositories {
     flatDir {
         dirs 'lib'
     }
+    maven {
+        name = "KosmX's maven"
+        url = "https://maven.kosmx.dev/"
+    }
 }
 
 dependencies {
     implementation 'org.jetbrains:annotations:24.0.0'
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
 	implementation fg.deobf("standobyte.jojo:JJBA-RipplesOfThePast:${main_mod_version}")
+    implementation fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:${playeranim_version}")
+
+    implementation fg.deobf("io.github.kosmx.bendy-lib:bendy-lib-forge:${bendylib_version}")
 }
 
 mixin {

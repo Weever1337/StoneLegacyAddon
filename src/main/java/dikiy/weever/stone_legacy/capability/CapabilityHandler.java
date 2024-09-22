@@ -19,12 +19,17 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = StoneLegacyAddon.MOD_ID)
 public class CapabilityHandler {
     private static final ResourceLocation ZOMBIE_UTIL_CAP = new ResourceLocation(StoneLegacyAddon.MOD_ID, "zombie_util");
+    private static final ResourceLocation PILLARMAN_UTIL_CAP = new ResourceLocation(StoneLegacyAddon.MOD_ID, "pillarman_util");
 
     public static void registerCapabilities() {
         CapabilityManager.INSTANCE.register(
                 ZombieUtilCap.class,
                 new ZombieUtilStorage(),
                 () -> new ZombieUtilCap(null));
+        CapabilityManager.INSTANCE.register(
+                PillarmanUtilCap.class,
+                new PillarmanUtilStorage(),
+                () -> new PillarmanUtilCap(null));
     }
 
     @SubscribeEvent
@@ -33,6 +38,7 @@ public class CapabilityHandler {
         if (entity instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) entity;
             event.addCapability(ZOMBIE_UTIL_CAP, new ZombieUtilProvider(living));
+            event.addCapability(PILLARMAN_UTIL_CAP, new PillarmanUtilProvider(living));
         }
     }
 
@@ -43,6 +49,10 @@ public class CapabilityHandler {
         if (entityTracked instanceof LivingEntity) {
             entityTracked.getCapability(ZombieUtilProvider.CAPABILITY).ifPresent(ZombieUtilCap -> {
                 ZombieUtilCap.syncWithAnyPlayer(trackingPlayer);
+            });
+
+            entityTracked.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent(PillarmanUtilCap -> {
+                PillarmanUtilCap.syncWithAnyPlayer(trackingPlayer);
             });
         }
     }
@@ -65,6 +75,11 @@ public class CapabilityHandler {
     private static void syncAttachedData(PlayerEntity player) {
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
         player.getCapability(ZombieUtilProvider.CAPABILITY).ifPresent(data -> {
+            data.syncWithEntityOnly(serverPlayer);
+            data.syncWithAnyPlayer(serverPlayer);
+        });
+
+        player.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent(data -> {
             data.syncWithEntityOnly(serverPlayer);
             data.syncWithAnyPlayer(serverPlayer);
         });

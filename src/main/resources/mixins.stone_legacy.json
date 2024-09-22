@@ -4,9 +4,11 @@
   "refmap": "mixins.stone_legacy.refmap.json",
   "minVersion": "0.8",
   "mixins": [
-    "VampireActionMixin",
     "FruitEatingMixin",
     "HamonMasterMixin",
-    "NoBloodDrainFromZombiesMixin"
+    "NoBloodDrainFromZombiesMixin",
+    "PillarmanDataMixin",
+    "PillarmanPowerTypeMixin",
+    "VampireActionMixin"
   ]
 }
