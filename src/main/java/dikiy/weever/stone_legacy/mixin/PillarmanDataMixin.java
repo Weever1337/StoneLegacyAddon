@@ -23,14 +23,9 @@ public abstract class PillarmanDataMixin extends TypeSpecificData {
     
     @Inject(method = "onPowerGiven", at = @At("HEAD"))
     public void onPowerGiven(NonStandPowerType<?> oldType, TypeSpecificData oldData, CallbackInfo ci) {
-        System.out.println("from " + oldType + " to " + power.getType());
-
         LivingEntity user = power.getUser();
-        if (!user.level.isClientSide()) {
-            if (oldType == ModPowers.HAMON.get() && oldData instanceof HamonData) {
-                System.out.println("HAMON USER");
-                stoneLegacyAddon$setHamonUser(true);
-            }
+        if (user.level.isClientSide()) {
+            power.clUpdateHud();
         }
     }
 
