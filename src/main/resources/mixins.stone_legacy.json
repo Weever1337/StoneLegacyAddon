@@ -1,0 +1,14 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "package": "dikiy.weever.stone_legacy.mixin",
+  "refmap": "mixins.stone_legacy.refmap.json",
+  "minVersion": "0.8",
+  "mixins": [
+    "FruitEatingMixin",
+    "HamonMasterMixin",
+    "NoBloodDrainFromZombiesMixin",
+    "PillarmanDataMixin",
+    "PillarmanPowerTypeMixin",
+    "VampireActionMixin"
+  ]
+}
