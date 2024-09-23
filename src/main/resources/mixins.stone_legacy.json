@@ -7,7 +7,6 @@
     "FruitEatingMixin",
     "HamonMasterMixin",
     "NoBloodDrainFromZombiesMixin",
-    "PillarmanDataMixin",
     "PillarmanPowerTypeMixin",
     "VampireActionMixin"
   ]
