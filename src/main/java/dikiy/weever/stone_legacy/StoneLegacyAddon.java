@@ -19,9 +19,9 @@ public class StoneLegacyAddon {
 
     public StoneLegacyAddon() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        InitActions.ACTIONS.register(modEventBus);
         InitItems.ITEMS.register(modEventBus);
         AddonLootModifierSerializers.LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
-        InitActions.ACTIONS.register(modEventBus);
         modEventBus.addListener(this::preInit);
     }
 

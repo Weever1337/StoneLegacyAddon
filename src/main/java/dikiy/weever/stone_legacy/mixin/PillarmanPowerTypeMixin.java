@@ -35,7 +35,7 @@ public abstract class PillarmanPowerTypeMixin extends NonStandPowerType<Pillarma
         }
     }
 
-    @Inject(method="isActionLegalInHud(Lcom/github/standobyte/jojo/action/Action;Lcom/github/standobyte/jojo/power/impl/nonstand/INonStandPower;)Z", at = @At(value = "INVOKE", target = "Lcom/github/standobyte/jojo/power/impl/nonstand/INonStandPower;getTypeSpecificData(Lcom/github/standobyte/jojo/power/impl/nonstand/type/NonStandPowerType;)Ljava/util/Optional;"), locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
+    @Inject(method = "isActionLegalInHud(Lcom/github/standobyte/jojo/action/Action;Lcom/github/standobyte/jojo/power/impl/nonstand/INonStandPower;)Z", at = @At(value = "INVOKE", target = "Lcom/github/standobyte/jojo/power/impl/nonstand/INonStandPower;getTypeSpecificData(Lcom/github/standobyte/jojo/power/impl/nonstand/type/NonStandPowerType;)Ljava/util/Optional;"), locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
     public void isActionLegalInHud(Action<INonStandPower> action, INonStandPower power, CallbackInfoReturnable<Boolean> cir, PillarmanAction pmAction) {
         if (pmAction == InitActions.PILLARMAN_HAMON_SUICIDE.get()) {
             System.out.println(power.getUser().getCapability(PillarmanUtilProvider.CAPABILITY).map(PillarmanUtilCap::getHamonUser).orElse(false));
@@ -43,10 +43,10 @@ public abstract class PillarmanPowerTypeMixin extends NonStandPowerType<Pillarma
         }
     }
 
-    @Inject(method="onClear", at = @At("HEAD"))
+    @Inject(method = "onClear", at = @At("HEAD"))
     public void onClear(INonStandPower power, CallbackInfo ci) {
         LivingEntity user = power.getUser();
         System.out.println("soutAmerica");
-        user.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent(cap -> cap.sethamonUser(false));
+        user.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent(cap -> cap.setHamonUser(false));
     }
 }

@@ -3,12 +3,8 @@ package dikiy.weever.stone_legacy.items;
 import com.github.standobyte.jojo.init.ModStatusEffects;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
-import com.github.standobyte.jojo.power.impl.nonstand.TypeSpecificData;
-import com.github.standobyte.jojo.power.impl.nonstand.type.NonStandPowerType;
 import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonPowerType;
-import com.github.standobyte.jojo.power.impl.nonstand.type.pillarman.PillarmanData;
 import com.github.standobyte.jojo.power.impl.nonstand.type.pillarman.PillarmanPowerType;
-import dikiy.weever.stone_legacy.StoneLegacyAddon;
 import dikiy.weever.stone_legacy.capability.PillarmanUtilProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -19,8 +15,6 @@ import net.minecraft.item.UseAction;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-
-import java.util.Optional;
 
 public class FruitItem extends Item {
     public FruitItem(Properties properties) {
@@ -51,7 +45,7 @@ public class FruitItem extends Item {
                 INonStandPower.getNonStandPowerOptional(entity).ifPresent(power -> {
                     PillarmanPowerType pillarman = ModPowers.PILLAR_MAN.get();
                     HamonPowerType hamon = ModPowers.HAMON.get();
-                    entity.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent(pilla -> pilla.sethamonUser(power.getType() == hamon));
+                    entity.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent(pilla -> pilla.setHamonUser(power.getType() == hamon));
                     power.clear();
                     power.givePower(pillarman);
                 });

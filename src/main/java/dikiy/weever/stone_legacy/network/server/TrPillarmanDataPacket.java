@@ -1,14 +1,9 @@
 package dikiy.weever.stone_legacy.network.server;
 
 import com.github.standobyte.jojo.client.ClientUtil;
-import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.network.packets.IModPacketHandler;
-import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import dikiy.weever.stone_legacy.capability.PillarmanUtilProvider;
-import dikiy.weever.stone_legacy.capability.ZombieUtilProvider;
-import dikiy.weever.stone_legacy.mixin.PillarmanDataMixin;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -42,7 +37,7 @@ public class TrPillarmanDataPacket {
             Entity entity = ClientUtil.getEntityById(msg.entityId);
             if (entity != null) {
 
-                entity.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent(cap -> cap.sethamonUser(msg.hamonUserState));
+                entity.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent(cap -> cap.setHamonUser(msg.hamonUserState));
             }
         }
 

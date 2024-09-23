@@ -1,21 +1,14 @@
 package dikiy.weever.stone_legacy.capability;
 
 import com.github.standobyte.jojo.JojoMod;
-import com.github.standobyte.jojo.capability.entity.LivingUtilCapProvider;
-import com.github.standobyte.jojo.capability.entity.PlayerUtilCapProvider;
 import com.github.standobyte.jojo.power.IPower;
-import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import com.github.standobyte.jojo.power.impl.stand.IStandPower;
 import dikiy.weever.stone_legacy.StoneLegacyAddon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -79,13 +72,18 @@ public class CapabilityHandler {
                 newCap.onClone(oldCap, event.isWasDeath());
             });
         });
+        original.getCapability(ZombieUtilProvider.CAPABILITY).ifPresent((oldCap) -> {
+            player.getCapability(ZombieUtilProvider.CAPABILITY).ifPresent((newCap) -> {
+                newCap.onClone(oldCap, event.isWasDeath());
+            });
+        });
     }
 
     private static <T extends IPower<T, ?>> void cloneCap(LazyOptional<T> oldCap, LazyOptional<T> newCap, boolean wasDeath, String warning) {
         if (oldCap.isPresent() && newCap.isPresent()) {
-            ((IPower)newCap.resolve().get()).onClone((IPower)oldCap.resolve().get(), wasDeath);
+            newCap.resolve().get().onClone(oldCap.resolve().get(), wasDeath);
         } else {
-            JojoMod.getLogger().warn("Failed to copy  data!");
+            JojoMod.getLogger().warn("Failed to copy data!");
         }
 
     }

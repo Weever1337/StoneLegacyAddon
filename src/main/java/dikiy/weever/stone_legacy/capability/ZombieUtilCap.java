@@ -29,6 +29,10 @@ public class ZombieUtilCap implements INBTSerializable<CompoundNBT> {
         return this.ownerUUID;
     }
 
+    public void onClone(ZombieUtilCap old, boolean wasDeath) {
+        this.ownerUUID = old.ownerUUID;
+    }
+
     public void syncWithAnyPlayer(ServerPlayerEntity player) {
         if (this.ownerUUID != null)
             AddonPackets.sendToClient(new TrSetOwnerUUIDPacket(entity.getId(), ownerUUID), player);

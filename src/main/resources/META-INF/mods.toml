@@ -10,7 +10,7 @@ authors = "${mod_authors}"
 logoFile="logo.png"
 credits="StandoByte"
 description='''
-no description k
+An addon what adds a Stone Fruit what have some changes with you.
 '''
 [[dependencies.${mod_id}]]
     modId="forge"
