@@ -10,7 +10,7 @@ authors = "${mod_authors}"
 logoFile="logo.png"
 credits="StandoByte"
 description='''
-An addon what adds a Stone Fruit what have some changes with you.
+An utility addon that does some survival-side changes to the power acquirement
 '''
 [[dependencies.${mod_id}]]
     modId="forge"
