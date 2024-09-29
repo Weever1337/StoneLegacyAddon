@@ -1,6 +1,7 @@
 package dikiy.weever.stone_legacy.util;
 
 import com.github.standobyte.jojo.entity.stand.StandEntity;
+import com.github.standobyte.jojo.power.impl.stand.StandUtil;
 import dikiy.weever.stone_legacy.StoneLegacyAddon;
 import dikiy.weever.stone_legacy.capability.ZombieUtilProvider;
 import net.minecraft.entity.Entity;
@@ -34,6 +35,12 @@ public class ZombieHandler {
     }
 
     private static PlayerEntity getPlayerFromDamageEntity(Entity damageEntity) {
-        return damageEntity instanceof StandEntity ? (PlayerEntity) ((StandEntity) damageEntity).getUser() : damageEntity instanceof PlayerEntity ? (PlayerEntity) damageEntity : null;
+        if (damageEntity instanceof LivingEntity) {
+            LivingEntity damageLiving = StandUtil.getStandUser((LivingEntity) damageEntity);
+            if (damageLiving instanceof PlayerEntity) {
+                return (PlayerEntity) damageLiving;
+            }
+        }
+        return null;
     }
 }
