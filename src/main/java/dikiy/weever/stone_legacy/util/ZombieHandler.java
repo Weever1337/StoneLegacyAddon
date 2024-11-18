@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -18,7 +18,7 @@ import java.util.Objects;
 @Mod.EventBusSubscriber(modid = StoneLegacyAddon.MOD_ID)
 public class ZombieHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onHurt(LivingHurtEvent event) {
+    public static void onHurt(LivingAttackEvent event) {
         LivingEntity hurtEntity = event.getEntityLiving();
         DamageSource damageSource = event.getSource();
         Entity damageEntity = damageSource.getEntity();
@@ -28,7 +28,6 @@ public class ZombieHandler {
                 return;
             }
             if (hurtEntity.getCapability(ZombieUtilProvider.CAPABILITY).map(cap -> Objects.equals(cap.getOwnerUUID(), hurtEntity.getUUID())).orElse(false)) {
-                event.setAmount(0);
                 event.setCanceled(true);
             }
         }

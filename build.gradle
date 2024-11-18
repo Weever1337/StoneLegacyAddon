@@ -66,12 +66,9 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-//    maven {
-//        name "RotP Maven"
-//        url 'https://raw.githubusercontent.com/StandoByte/RotP-maven/main'
-//    }
-    flatDir {
-        dirs 'lib'
+    maven {
+        name "RotP Maven"
+        url 'https://raw.githubusercontent.com/StandoByte/RotP-maven/main'
     }
     maven {
         name = "KosmX's maven"
