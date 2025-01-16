@@ -61,35 +61,28 @@ public class FruitItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        if (!world.isClientSide()) {
-        LivingEntity livingEntity = (LivingEntity) entity;
-        ItemStack handStack = livingEntity.getItemInHand(Hand.MAIN_HAND);
-        ItemStack offHandStack = livingEntity.getItemInHand(Hand.OFF_HAND);
-        FruitItem item = (FruitItem) stack.getItem();
-        if (stack != handStack && stack != offHandStack) {
-            int stage = getStage(stack);
-            if (stage > 0) {
-                stage -= 30;
-                stack.getTag().putInt("Stonefied", stage);
+        if (!world.isClientSide() && stack.getItem() instanceof FruitItem) {
+            LivingEntity livingEntity = (LivingEntity) entity;
+            ItemStack mainHand = livingEntity.getItemInHand(Hand.MAIN_HAND);
+            ItemStack offHand = livingEntity.getItemInHand(Hand.OFF_HAND);
+            FruitItem item = (FruitItem) stack.getItem();
+            if (stack != mainHand && stack != offHand) {
+                int stage = getStage(stack);
+                if (stage > 0) {
+                    stage -= 30;
+                    stack.getOrCreateTag().putInt("Stonefied", stage);
+                }
             }
-        }
-        int eatDuration = item.getUseDuration(stack);
-        float lightLevel = 6.0F;
-        if (world.dimensionType().hasSkyLight()
-                && !world.dimensionType().hasCeiling()
-                && world.isDay()
-                && !world.isRaining()
-                && !world.isThundering()) {
-            lightLevel = 15 * livingEntity.getBrightness() >= 6? 15 * livingEntity.getBrightness(): 6.0F;
-        }
-//        System.out.println(lightLevel);
-        float lightDelay = lightLevel == 0 ? eatDuration - 2 : ((eatDuration - 2) / lightLevel) / 2;
-        ItemStack[] hands = {handStack, offHandStack};
-            for (int i = 0; i < 2; i++) {
-                if (hands[i] != null) {
-                    int stage = getStage(hands[i]);
-                    stage = (stage >= 630) ? 630 : stage + (int) ((30 / lightDelay) * 6);
-                    hands[i].getTag().putInt("Stonefied", stage);
+            int eatDuration = item.getUseDuration(stack);
+            float brightness = livingEntity.getBrightness();
+            float lightLevel = world.dimensionType().hasSkyLight() && !world.dimensionType().hasCeiling() && world.isDay() && !world.isRaining() && !world.isThundering() ? brightness : 6.0F;
+            float lightDelay = lightLevel == 0 ? eatDuration - 2 : (eatDuration - 2) / lightLevel / 2;
+            ItemStack[] hands = {mainHand, offHand};
+            for (ItemStack hand : hands) {
+                if (hand != null && hand.getItem() instanceof FruitItem) {
+                    int stage = getStage(hand);
+                    stage = Math.min(stage + (int) (30 / lightDelay * 6), 630);
+                    hand.getOrCreateTag().putInt("Stonefied", stage);
                 }
             }
         }
