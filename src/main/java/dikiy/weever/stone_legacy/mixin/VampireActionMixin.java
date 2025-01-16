@@ -9,6 +9,8 @@ import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import com.github.standobyte.jojo.util.mc.MCUtil;
 import dikiy.weever.stone_legacy.capability.ZombieUtilProvider;
+import dikiy.weever.stone_legacy.network.AddonPackets;
+import dikiy.weever.stone_legacy.network.server.TrResetDeathTimePacket;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
@@ -75,21 +77,15 @@ public class VampireActionMixin extends VampirismAction {
         nonPower.clear();
         nonPower.givePower(ModPowers.ZOMBIE.get());
         nonPower.setEnergy((float) (Math.pow(1.6* previousEnergy, 1.8) / Math.pow(previousMaxEnergy, 2)));
-        MCUtil.onEntityResurrect(user);
+        stoneLegacyAddon$onEntityResurrect(user);
         user.setHealth(2f);
     }
 
-//    @Unique
-//    private List<ServerPlayerEntity> stoneLegacyAddon$playersAround(LivingEntity user, int range) {
-//        List<ServerPlayerEntity> players = new ArrayList<>();
-//        if (user.getServer() == null || user.getServer().getPlayerList().getPlayers().isEmpty()) return players;
-//        for (ServerPlayerEntity player : user.getServer().getPlayerList().getPlayers()) {
-//            if (player == user) continue;
-//            if (Math.hypot(player.getX() - user.getX(), player.getZ() - user.getZ()) <= range) {
-//                System.out.println("player: " + player.getDisplayName().getString());
-//                players.add(player);
-//            }
-//        }
-//        return players;
-//    }
+    @Unique
+    private void stoneLegacyAddon$onEntityResurrect(LivingEntity entity) {
+        if (entity.deathTime >= 1) {
+            entity.deathTime = 0;
+            AddonPackets.sendToClientsTrackingAndSelf(new TrResetDeathTimePacket(entity.getId()), entity);
+        }
+    }
 }

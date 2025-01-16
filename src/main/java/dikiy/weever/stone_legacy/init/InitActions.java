@@ -3,7 +3,6 @@ package dikiy.weever.stone_legacy.init;
 import com.github.standobyte.jojo.action.Action;
 import com.github.standobyte.jojo.action.non_stand.NonStandAction;
 import com.github.standobyte.jojo.action.non_stand.PillarmanAction;
-import com.github.standobyte.jojo.action.non_stand.VampirismHamonSuicide;
 import com.github.standobyte.jojo.power.impl.nonstand.type.NonStandPowerType;
 import dikiy.weever.stone_legacy.StoneLegacyAddon;
 import dikiy.weever.stone_legacy.action.non_stand.pillarman.PillarmanHamonSuicide;

@@ -30,7 +30,6 @@ public abstract class PillarmanPowerTypeMixin extends NonStandPowerType<Pillarma
     public void clAddMissingActions(ControlScheme controlScheme, INonStandPower power, CallbackInfo ci) {
         LivingEntity user = power.getUser();
         if (user.getCapability(PillarmanUtilProvider.CAPABILITY).map(PillarmanUtilCap::getHamonUser).orElse(false)) {
-            System.out.println("miss actions");
             controlScheme.addIfMissing(ControlScheme.Hotbar.RIGHT_CLICK, InitActions.PILLARMAN_HAMON_SUICIDE.get());
         }
     }
@@ -46,7 +45,6 @@ public abstract class PillarmanPowerTypeMixin extends NonStandPowerType<Pillarma
     @Inject(method = "onClear", at = @At("HEAD"))
     public void onClear(INonStandPower power, CallbackInfo ci) {
         LivingEntity user = power.getUser();
-        System.out.println("soutAmerica");
         user.getCapability(PillarmanUtilProvider.CAPABILITY).ifPresent(cap -> cap.setHamonUser(false));
     }
 }
