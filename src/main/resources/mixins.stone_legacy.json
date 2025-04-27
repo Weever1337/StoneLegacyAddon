@@ -8,6 +8,8 @@
     "HamonMasterMixin",
     "NoBloodDrainFromZombiesMixin",
     "PillarmanPowerTypeMixin",
-    "VampireActionMixin"
+    "PowerBaseImplMixin",
+    "VampireActionMixin",
+    "ZombieDataMixin"
   ]
 }
