@@ -1,5 +1,10 @@
 {
   "item.stone_legacy.fruit": "Stone Fruit",
+  "block.stone_legacy.aja_stone_mask_predicted_heat": "Stone Mask with Heated Aja Red Stone",
+  "block.stone_legacy.aja_stone_mask_predicted_light": "Stone Mask with Enlighten Aja Red Stone",
+  "block.stone_legacy.aja_stone_mask_predicted_wind": "Stone Mask with Windy Aja Red Stone",
+
   "death.attack.asphyxia": "%1$s was petrified",
+
   "action.stone_legacy.pillarman_hamon_suicide": "Hamon Suicide"
 }
