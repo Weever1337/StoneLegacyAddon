@@ -19,14 +19,15 @@ public class StoneLegacyAddon {
 
     public StoneLegacyAddon() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        initVanillaRegistries(modEventBus);
+
+        modEventBus.addListener(this::preInit);
+    }
+    private void initVanillaRegistries(IEventBus modEventBus) {
         InitActions.ACTIONS.register(modEventBus);
         InitItems.ITEMS.register(modEventBus);
         AddonLootModifierSerializers.LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
-        modEventBus.addListener(this::preInit);
-    }
-
-    public static Logger getLogger() {
-        return LOGGER;
     }
 
     private void preInit(FMLCommonSetupEvent event) {
