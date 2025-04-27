@@ -30,6 +30,7 @@ public abstract class NonStandPowerMixin extends PowerBaseImpl<INonStandPower, N
         if (!canGetPower(type) && !(force && type != null)) {
             return false;
         }
+
         NonStandPowerType<?> oldType = this.getType();
         TypeSpecificData oldData = typeSpecificData;
         setType(type);

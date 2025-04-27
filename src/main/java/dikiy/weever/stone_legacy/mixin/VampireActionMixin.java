@@ -12,6 +12,7 @@ import dikiy.weever.stone_legacy.capability.ZombieUtilProvider;
 import dikiy.weever.stone_legacy.mixin_helper.INonStandPowerMixinHelper;
 import dikiy.weever.stone_legacy.network.AddonPackets;
 import dikiy.weever.stone_legacy.network.server.TrResetDeathTimePacket;
+import dikiy.weever.stone_legacy.network.server.TrSyncGivePowerDataPacket;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
@@ -77,6 +78,11 @@ public class VampireActionMixin extends VampirismAction {
         float previousMaxEnergy = nonPower.getMaxEnergy();
         if (nonPower instanceof INonStandPowerMixinHelper) {
             ((INonStandPowerMixinHelper) nonPower).stoneLegacyAddon$givePower(ModPowers.ZOMBIE.get(), true);
+            if (!user.level.isClientSide) {
+                AddonPackets.sendToClientsTrackingAndSelf(new TrSyncGivePowerDataPacket(user.getId(), ModPowers.ZOMBIE.get().getRegistryName(), true), user);
+            }
+//            nonPower.clear()
+//            nonPower.givePower(ModPowers.ZOMBIE.get())  ;
             nonPower.setEnergy((float) (Math.pow(1.6 * previousEnergy, 1.8) / Math.pow(previousMaxEnergy, 2)));
             stoneLegacyAddon$onEntityResurrect(user);
             user.setHealth(2f);

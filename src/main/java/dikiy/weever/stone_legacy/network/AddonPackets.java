@@ -5,6 +5,7 @@ import dikiy.weever.stone_legacy.StoneLegacyAddon;
 import dikiy.weever.stone_legacy.network.server.TrPillarmanDataPacket;
 import dikiy.weever.stone_legacy.network.server.TrResetDeathTimePacket;
 import dikiy.weever.stone_legacy.network.server.TrSetOwnerUUIDPacket;
+import dikiy.weever.stone_legacy.network.server.TrSyncGivePowerDataPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -28,8 +29,10 @@ public class AddonPackets {
                 .serverAcceptedVersions(PROTOCOL_VERSION::equals)
                 .networkProtocolVersion(() -> PROTOCOL_VERSION)
                 .simpleChannel();
+
         registerMessage(channel, new TrSetOwnerUUIDPacket.Handler(), Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         registerMessage(channel, new TrPillarmanDataPacket.Handler(), Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        registerMessage(channel, new TrSyncGivePowerDataPacket.Handler(), Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         registerMessage(channel, new TrResetDeathTimePacket.Handler(), Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
