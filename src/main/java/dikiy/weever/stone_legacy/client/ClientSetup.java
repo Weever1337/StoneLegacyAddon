@@ -16,7 +16,7 @@ public class ClientSetup {
         event.enqueueWork(() -> {
             ItemModelsProperties.register(InitItems.FRUIT.get(), new ResourceLocation(StoneLegacyAddon.MOD_ID, "stage"),
                     (itemStack, clientWorld, livingEntity) -> livingEntity != null ?
-                            itemStack.getOrCreateTag().getInt("Stonefied"): 21);
+                            itemStack.getOrCreateTag().getInt("Stonefied") : 21);
         });
     }
 }

@@ -25,12 +25,12 @@ public class StoneLegacyAddon {
         modEventBus.addListener(this::preInit);
     }
 
-    private void preInit(FMLCommonSetupEvent event){
-        AddonPackets.init();
-        CapabilityHandler.registerCapabilities();
-    }
-
     public static Logger getLogger() {
         return LOGGER;
+    }
+
+    private void preInit(FMLCommonSetupEvent event) {
+        AddonPackets.init();
+        CapabilityHandler.registerCapabilities();
     }
 }

@@ -18,13 +18,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HamonMasterEntity.class)
 public abstract class HamonMasterMixin extends MobEntity implements INPC, IMobPowerUser, IEntityAdditionalSpawnData {
 
-    @Shadow public abstract INonStandPower getPower();
+    protected HamonMasterMixin(EntityType<? extends MobEntity> p_i48576_1_, World p_i48576_2_) {
+        super(p_i48576_1_, p_i48576_2_);
+    }
 
-    @Shadow @Deprecated protected abstract void restoreHamon();
+    @Shadow
+    public abstract INonStandPower getPower();
 
-    protected HamonMasterMixin(EntityType<? extends MobEntity> p_i48576_1_, World p_i48576_2_) { super(p_i48576_1_, p_i48576_2_); }
+    @Shadow
+    @Deprecated
+    protected abstract void restoreHamon();
 
-    @Inject(method="restoreHamon", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "restoreHamon", at = @At(value = "HEAD"), cancellable = true)
     public void zombiePowerCheck(CallbackInfo ci) {
         INonStandPower.getNonStandPowerOptional(this).ifPresent(power -> {
             if (power.getType() != ModPowers.HAMON.get()) ci.cancel();

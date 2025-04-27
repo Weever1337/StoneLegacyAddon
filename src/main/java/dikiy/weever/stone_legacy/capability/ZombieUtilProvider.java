@@ -11,7 +11,7 @@ import net.minecraftforge.common.util.LazyOptional;
 public class ZombieUtilProvider implements ICapabilitySerializable<INBT> {
     @CapabilityInject(ZombieUtilCap.class)
     public static Capability<ZombieUtilCap> CAPABILITY = null;
-    private LazyOptional<ZombieUtilCap> instance;
+    private final LazyOptional<ZombieUtilCap> instance;
 
     public ZombieUtilProvider(LivingEntity player) {
         this.instance = LazyOptional.of(() -> new ZombieUtilCap(player));

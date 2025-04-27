@@ -16,15 +16,15 @@ public class PillarmanUtilCap implements INBTSerializable<CompoundNBT> {
         this.entity = entity;
     }
 
+    public boolean getHamonUser() {
+        return this.hamonUser;
+    }
+
     public void setHamonUser(boolean hamonUser) {
         this.hamonUser = hamonUser;
         if (!entity.level.isClientSide()) {
             AddonPackets.sendToClientsTrackingAndSelf(new TrPillarmanDataPacket(entity.getId(), hamonUser), entity);
         }
-    }
-
-    public boolean getHamonUser() {
-        return this.hamonUser;
     }
 
     public void syncWithAnyPlayer(ServerPlayerEntity player) {

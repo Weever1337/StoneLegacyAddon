@@ -25,16 +25,20 @@ public abstract class ZombieDataMixin extends TypeSpecificData implements IZombi
     private TypeSpecificData stoneLegacyAddon$oldData;
     @Unique
     private NonStandPowerType<?> stoneLegacyAddon$previousPowerType;
+
     @Inject(method = "onPowerGiven", at = @At("HEAD"), remap = false)
     public void saveOldData(NonStandPowerType<?> oldType, TypeSpecificData oldData, CallbackInfo ci) {
         this.stoneLegacyAddon$previousPowerType = oldType;
         this.stoneLegacyAddon$oldData = oldData;
     }
+
     @Inject(method = "writeNBT", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/nbt/CompoundNBT;putBoolean(Ljava/lang/String;Z)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION, remap = false)
     public void writeOldData(CallbackInfoReturnable<CompoundNBT> ci, CompoundNBT nbt) {
-        if (stoneLegacyAddon$previousPowerType != null) nbt.putString("PreviousPowerType", JojoCustomRegistries.NON_STAND_POWERS.getKeyAsString(stoneLegacyAddon$previousPowerType));
+        if (stoneLegacyAddon$previousPowerType != null)
+            nbt.putString("PreviousPowerType", JojoCustomRegistries.NON_STAND_POWERS.getKeyAsString(stoneLegacyAddon$previousPowerType));
         if (stoneLegacyAddon$oldData != null) nbt.put("OldData", stoneLegacyAddon$getPreviousDataNbt());
     }
+
     @Inject(method = "readNBT", at = @At(value = "TAIL"), remap = false)
     public void readOldData(CompoundNBT nbt, CallbackInfo ci) {
         IForgeRegistry<NonStandPowerType<?>> powerTypeRegistry = JojoCustomRegistries.NON_STAND_POWERS.getRegistry();
@@ -48,15 +52,26 @@ public abstract class ZombieDataMixin extends TypeSpecificData implements IZombi
             }
         }
     }
-    @Override @Unique
+
+    @Override
+    @Unique
     public CompoundNBT stoneLegacyAddon$getPreviousDataNbt() {
         if (this.stoneLegacyAddon$oldData != null) {
             return stoneLegacyAddon$oldData.writeNBT();
         }
         return null;
     }
-    @Override @Nullable @Unique
-    public TypeSpecificData stoneLegacyAddon$getPreviousData() { return stoneLegacyAddon$oldData; }
-    @Override @Unique
-    public NonStandPowerType<?> stoneLegacyAddon$getPreviousPowerType() { return this.stoneLegacyAddon$previousPowerType; }
+
+    @Override
+    @Nullable
+    @Unique
+    public TypeSpecificData stoneLegacyAddon$getPreviousData() {
+        return stoneLegacyAddon$oldData;
+    }
+
+    @Override
+    @Unique
+    public NonStandPowerType<?> stoneLegacyAddon$getPreviousPowerType() {
+        return this.stoneLegacyAddon$previousPowerType;
+    }
 }

@@ -1,7 +1,7 @@
 package dikiy.weever.stone_legacy.action.non_stand.pillarman;
 
-import com.github.standobyte.jojo.action.non_stand.PillarmanAction;
 import com.github.standobyte.jojo.action.ActionTarget;
+import com.github.standobyte.jojo.action.non_stand.PillarmanAction;
 import com.github.standobyte.jojo.client.sound.ClientTickingSoundsHelper;
 import com.github.standobyte.jojo.init.ModStatusEffects;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
@@ -40,7 +40,7 @@ public class PillarmanHamonSuicide extends PillarmanAction {
         if (!world.isClientSide()) {
             DamageUtil.dealHamonDamage(user, 200, user, null);
             HamonUtil.hamonExplosion(world, user, null,
-                user.getBoundingBox().getCenter(), 6, 6);
+                    user.getBoundingBox().getCenter(), 6, 6);
         }
     }
 }

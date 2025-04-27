@@ -10,11 +10,11 @@ public class AddonLootModifierSerializers {
     public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIER_SERIALIZERS;
     public static final RegistryObject<AdditionalSingleItemLootModifier.Serializer> ADDITIONAL_SINGLE_ITEM;
 
-    public AddonLootModifierSerializers() {
-    }
-
     static {
         LOOT_MODIFIER_SERIALIZERS = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, "stone_legacy");
         ADDITIONAL_SINGLE_ITEM = LOOT_MODIFIER_SERIALIZERS.register("additional_single_item", AdditionalSingleItemLootModifier.Serializer::new);
+    }
+
+    public AddonLootModifierSerializers() {
     }
 }

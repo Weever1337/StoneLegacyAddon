@@ -17,16 +17,20 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 public class FruitItem extends Item {
+    public static final DamageSource ASPHYXIA = new DamageSource("asphyxia").bypassArmor().bypassMagic().bypassInvul();
+
     public FruitItem(Properties properties) {
         super(properties);
+    }
+
+    public static int getStage(ItemStack stack) {
+        return stack.getOrCreateTag().getInt("Stonefied");
     }
 
     @Override
     public UseAction getUseAnimation(ItemStack stack) {
         return UseAction.EAT;
     }
-
-
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity) {
@@ -53,10 +57,6 @@ public class FruitItem extends Item {
             }
         }
         return stack;
-    }
-
-    public static int getStage(ItemStack stack) {
-        return stack.getOrCreateTag().getInt("Stonefied");
     }
 
     @Override
@@ -87,5 +87,4 @@ public class FruitItem extends Item {
             }
         }
     }
-    public static final DamageSource ASPHYXIA = new DamageSource("asphyxia").bypassArmor().bypassMagic().bypassInvul();
 }

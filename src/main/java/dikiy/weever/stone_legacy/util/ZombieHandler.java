@@ -1,6 +1,5 @@
 package dikiy.weever.stone_legacy.util;
 
-import com.github.standobyte.jojo.entity.stand.StandEntity;
 import com.github.standobyte.jojo.power.impl.stand.StandUtil;
 import dikiy.weever.stone_legacy.StoneLegacyAddon;
 import dikiy.weever.stone_legacy.capability.ZombieUtilProvider;

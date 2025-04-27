@@ -13,10 +13,19 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value = NonStandPower.class, remap = false)
 public abstract class NonStandPowerMixin extends PowerBaseImpl<INonStandPower, NonStandPowerType<?>> implements INonStandPower, INonStandPowerMixinHelper {
-    @Shadow private TypeSpecificData typeSpecificData;
-    @Shadow private void setType(NonStandPowerType<?> powerType) {}
-    public NonStandPowerMixin(LivingEntity user) { super(user); }
-    @Override @Unique
+    @Shadow
+    private TypeSpecificData typeSpecificData;
+
+    public NonStandPowerMixin(LivingEntity user) {
+        super(user);
+    }
+
+    @Shadow
+    private void setType(NonStandPowerType<?> powerType) {
+    }
+
+    @Override
+    @Unique
     public boolean stoneLegacyAddon$givePower(NonStandPowerType<?> type, boolean force) {
         if (!canGetPower(type) && !(force && type != null)) {
             return false;

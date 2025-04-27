@@ -17,16 +17,15 @@ public class ZombieUtilCap implements INBTSerializable<CompoundNBT> {
         this.entity = entity;
     }
 
+    public UUID getOwnerUUID() {
+        return this.ownerUUID;
+    }
 
     public void setOwnerUUID(UUID ownerUUID) {
         this.ownerUUID = ownerUUID;
         if (!entity.level.isClientSide()) {
             AddonPackets.sendToClientsTrackingAndSelf(new TrSetOwnerUUIDPacket(entity.getId(), ownerUUID), entity);
         }
-    }
-
-    public UUID getOwnerUUID() {
-        return this.ownerUUID;
     }
 
     public void onClone(ZombieUtilCap old, boolean wasDeath) {
@@ -45,7 +44,7 @@ public class ZombieUtilCap implements INBTSerializable<CompoundNBT> {
     @Override
     public CompoundNBT serializeNBT() {
         CompoundNBT nbt = new CompoundNBT();
-        if(this.ownerUUID != null)
+        if (this.ownerUUID != null)
             nbt.putUUID("ownerUUID", this.ownerUUID);
         return nbt;
     }

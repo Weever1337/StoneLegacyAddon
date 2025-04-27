@@ -11,7 +11,7 @@ import net.minecraftforge.common.util.LazyOptional;
 public class PillarmanUtilProvider implements ICapabilitySerializable<INBT> {
     @CapabilityInject(PillarmanUtilCap.class)
     public static Capability<PillarmanUtilCap> CAPABILITY = null;
-    private LazyOptional<PillarmanUtilCap> instance;
+    private final LazyOptional<PillarmanUtilCap> instance;
 
     public PillarmanUtilProvider(LivingEntity player) {
         this.instance = LazyOptional.of(() -> new PillarmanUtilCap(player));

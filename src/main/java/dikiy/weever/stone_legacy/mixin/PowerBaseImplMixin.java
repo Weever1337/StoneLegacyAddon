@@ -18,7 +18,10 @@ import javax.annotation.Nonnull;
 
 @Mixin(value = PowerBaseImpl.class, remap = false)
 public abstract class PowerBaseImplMixin<P extends IPower<P, T>, T extends IPowerType<P, T>> implements IPower<P, T> {
-    @Shadow @Final @Nonnull protected LivingEntity user;
+    @Shadow
+    @Final
+    @Nonnull
+    protected LivingEntity user;
 
     @Inject(method = "onClone", at = @At("TAIL"), remap = false)
     public void restorePreviousPower(P oldPower, boolean wasDeath, CallbackInfo ci) {
