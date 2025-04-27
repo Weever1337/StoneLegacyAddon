@@ -1,6 +1,5 @@
 package dikiy.weever.stone_legacy.init;
 
-import com.github.standobyte.jojo.init.ModBlocks;
 import com.github.standobyte.jojo.init.ModItems;
 import com.github.standobyte.jojo.item.ModArmorMaterials;
 import com.github.standobyte.jojo.power.impl.nonstand.type.pillarman.PillarmanData;

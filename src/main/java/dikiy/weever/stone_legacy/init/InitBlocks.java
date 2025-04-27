@@ -1,6 +1,5 @@
 package dikiy.weever.stone_legacy.init;
 
-import com.github.standobyte.jojo.JojoMod;
 import com.github.standobyte.jojo.block.StoneMaskBlock;
 import dikiy.weever.stone_legacy.StoneLegacyAddon;
 import net.minecraft.block.Block;

@@ -2,8 +2,6 @@ package dikiy.weever.stone_legacy.client;
 
 import com.github.standobyte.jojo.client.render.armor.ArmorModelRegistry;
 import com.github.standobyte.jojo.client.render.armor.model.StoneMaskModel;
-import com.github.standobyte.jojo.init.ModBlocks;
-import com.github.standobyte.jojo.init.ModItems;
 import dikiy.weever.stone_legacy.StoneLegacyAddon;
 import dikiy.weever.stone_legacy.init.InitBlocks;
 import dikiy.weever.stone_legacy.init.InitItems;

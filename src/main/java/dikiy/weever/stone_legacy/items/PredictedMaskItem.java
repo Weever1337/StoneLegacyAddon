@@ -13,6 +13,7 @@ public class PredictedMaskItem extends StoneMaskItem {
         super(material, slot, builder, block);
         this.PREDICTED_MODE = builder.mode;
     }
+    public PillarmanData.Mode getMode() { return PREDICTED_MODE; }
     public static class Properties extends Item.Properties {
         private PillarmanData.Mode mode = PillarmanData.Mode.NONE;
         public Properties prediction(PillarmanData.Mode mode) {
