@@ -5,7 +5,6 @@ import com.github.standobyte.jojo.power.IPower;
 import com.github.standobyte.jojo.power.IPowerType;
 import com.github.standobyte.jojo.power.impl.PowerBaseImpl;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
-import com.github.standobyte.jojo.power.impl.nonstand.type.zombie.ZombiePowerType;
 import dikiy.weever.stone_legacy.mixin_helper.IZombieDataMixinHelper;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Final;
@@ -23,20 +22,20 @@ public abstract class PowerBaseImplMixin<P extends IPower<P, T>, T extends IPowe
 
     @Inject(method = "onClone", at = @At("TAIL"), remap = false)
     public void restorePreviousPower(P oldPower, boolean wasDeath, CallbackInfo ci) {
-        if (oldPower.hasPower() && oldPower.getType() instanceof ZombiePowerType) {
-            if (wasDeath)
-                INonStandPower.getNonStandPowerOptional(user).ifPresent(p ->
-                    p.getTypeSpecificData(ModPowers.ZOMBIE.get()).ifPresent(d -> {
-                        if (d instanceof IZombieDataMixinHelper) {
-                            IZombieDataMixinHelper data = (IZombieDataMixinHelper) d;
-                            if (data.getPreviousPowerType() != null) {
-                                if (data.getPreviousData() != null) {
-                                    p.givePower(data.getPreviousPowerType());
-                                    d.readNBT(data.getPreviousDataNbt());
-                                } else p.clear();
+        if (oldPower.hasPower() && oldPower.getType() == ModPowers.ZOMBIE.get()) {
+            if (wasDeath) {
+                ((INonStandPower) oldPower).getTypeSpecificData(ModPowers.ZOMBIE.get()).ifPresent(d -> {
+                    if (d instanceof IZombieDataMixinHelper) {
+                        IZombieDataMixinHelper data = (IZombieDataMixinHelper) d;
+                        if (data.stoneLegacyAddon$getPreviousPowerType() != null) {
+                            if (data.stoneLegacyAddon$getPreviousData() != null) {
+                                ((INonStandPower) oldPower).givePower(data.stoneLegacyAddon$getPreviousPowerType());
+                                d.readNBT(data.stoneLegacyAddon$getPreviousDataNbt());
                             }
                         }
-                    }));
+                    }
+                });
+            }
         }
     }
 }

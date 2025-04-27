@@ -22,42 +22,41 @@ import javax.annotation.Nullable;
 @Mixin(value = ZombieData.class, remap = false)
 public abstract class ZombieDataMixin extends TypeSpecificData implements IZombieDataMixinHelper {
     @Unique
-    private TypeSpecificData oldData;
+    private TypeSpecificData stoneLegacyAddon$oldData;
     @Unique
-    private NonStandPowerType<?> previousPowerType;
+    private NonStandPowerType<?> stoneLegacyAddon$previousPowerType;
     @Inject(method = "onPowerGiven", at = @At("HEAD"), remap = false)
     public void saveOldData(NonStandPowerType<?> oldType, TypeSpecificData oldData, CallbackInfo ci) {
-        this.previousPowerType = oldType;
-        this.oldData = oldData;
+        this.stoneLegacyAddon$previousPowerType = oldType;
+        this.stoneLegacyAddon$oldData = oldData;
     }
     @Inject(method = "writeNBT", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/nbt/CompoundNBT;putBoolean(Ljava/lang/String;Z)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION, remap = false)
     public void writeOldData(CallbackInfoReturnable<CompoundNBT> ci, CompoundNBT nbt) {
-        if (previousPowerType != null) nbt.putString("PreviousPowerType", JojoCustomRegistries.NON_STAND_POWERS.getKeyAsString(previousPowerType));
-        if (oldData != null) nbt.put("OldData", getPreviousDataNbt());
+        if (stoneLegacyAddon$previousPowerType != null) nbt.putString("PreviousPowerType", JojoCustomRegistries.NON_STAND_POWERS.getKeyAsString(stoneLegacyAddon$previousPowerType));
+        if (stoneLegacyAddon$oldData != null) nbt.put("OldData", stoneLegacyAddon$getPreviousDataNbt());
     }
     @Inject(method = "readNBT", at = @At(value = "TAIL"), remap = false)
     public void readOldData(CompoundNBT nbt, CallbackInfo ci) {
         IForgeRegistry<NonStandPowerType<?>> powerTypeRegistry = JojoCustomRegistries.NON_STAND_POWERS.getRegistry();
         String powerName = nbt.getString("PreviousPowerType");
         if (!powerName.equals(IPowerType.NO_POWER_NAME)) {
-            previousPowerType = powerTypeRegistry.getValue(new ResourceLocation(powerName));
-            if (previousPowerType != null) {
+            stoneLegacyAddon$previousPowerType = powerTypeRegistry.getValue(new ResourceLocation(powerName));
+            if (stoneLegacyAddon$previousPowerType != null) {
                 CompoundNBT oldDataNBT = nbt.getCompound("PreviousData");
-                oldData = previousPowerType.newSpecificDataInstance();
-                oldData.readNBT(oldDataNBT);
+                stoneLegacyAddon$oldData = stoneLegacyAddon$previousPowerType.newSpecificDataInstance();
+                stoneLegacyAddon$oldData.readNBT(oldDataNBT);
             }
         }
     }
-    @Override
-    public CompoundNBT getPreviousDataNbt() {
-        if (this.oldData != null) {
-            CompoundNBT nbt = oldData.writeNBT();
-            return nbt;
+    @Override @Unique
+    public CompoundNBT stoneLegacyAddon$getPreviousDataNbt() {
+        if (this.stoneLegacyAddon$oldData != null) {
+            return stoneLegacyAddon$oldData.writeNBT();
         }
         return null;
     }
-    @Override @Nullable
-    public TypeSpecificData getPreviousData() { return oldData; }
-    @Override
-    public NonStandPowerType<?> getPreviousPowerType() { return this.previousPowerType; }
+    @Override @Nullable @Unique
+    public TypeSpecificData stoneLegacyAddon$getPreviousData() { return stoneLegacyAddon$oldData; }
+    @Override @Unique
+    public NonStandPowerType<?> stoneLegacyAddon$getPreviousPowerType() { return this.stoneLegacyAddon$previousPowerType; }
 }

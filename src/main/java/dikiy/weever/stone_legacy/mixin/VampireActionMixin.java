@@ -9,6 +9,7 @@ import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import com.github.standobyte.jojo.util.mc.MCUtil;
 import dikiy.weever.stone_legacy.capability.ZombieUtilProvider;
+import dikiy.weever.stone_legacy.mixin_helper.INonStandPowerMixinHelper;
 import dikiy.weever.stone_legacy.network.AddonPackets;
 import dikiy.weever.stone_legacy.network.server.TrResetDeathTimePacket;
 import net.minecraft.entity.LivingEntity;
@@ -74,11 +75,12 @@ public class VampireActionMixin extends VampirismAction {
         user.getCapability(ZombieUtilProvider.CAPABILITY).ifPresent(cap -> cap.setOwnerUUID(ownerUUID));
         float previousEnergy = nonPower.getEnergy();
         float previousMaxEnergy = nonPower.getMaxEnergy();
-        nonPower.clear();
-        nonPower.givePower(ModPowers.ZOMBIE.get());
-        nonPower.setEnergy((float) (Math.pow(1.6* previousEnergy, 1.8) / Math.pow(previousMaxEnergy, 2)));
-        stoneLegacyAddon$onEntityResurrect(user);
-        user.setHealth(2f);
+        if (nonPower instanceof INonStandPowerMixinHelper) {
+            ((INonStandPowerMixinHelper) nonPower).stoneLegacyAddon$givePower(ModPowers.ZOMBIE.get(), true);
+            nonPower.setEnergy((float) (Math.pow(1.6 * previousEnergy, 1.8) / Math.pow(previousMaxEnergy, 2)));
+            stoneLegacyAddon$onEntityResurrect(user);
+            user.setHealth(2f);
+        }
     }
 
     @Unique
