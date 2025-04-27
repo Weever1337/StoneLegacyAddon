@@ -11,6 +11,7 @@
     "NonStandPowerMixin",
     "PillarmanPowerTypeMixin",
     "PowerBaseImplMixin",
+    "StoneMaskBlockMixin",
     "VampireActionMixin",
     "ZombieDataMixin"
   ]
