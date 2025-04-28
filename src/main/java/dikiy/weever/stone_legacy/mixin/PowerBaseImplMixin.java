@@ -23,22 +23,21 @@ public abstract class PowerBaseImplMixin<P extends IPower<P, T>, T extends IPowe
     @Nonnull
     protected LivingEntity user;
 
+    @Shadow protected abstract void keepPower(P oldPower, boolean wasDeath);
+
     @Inject(method = "onClone", at = @At("TAIL"), remap = false)
-    public void restorePreviousPower(P oldPower, boolean wasDeath, CallbackInfo ci) {
+    public void keepPreviousPower(P oldPower, boolean wasDeath, CallbackInfo ci) {
         if (oldPower.hasPower() && oldPower.getType() == ModPowers.ZOMBIE.get()) {
-            if (wasDeath) {
-                ((INonStandPower) oldPower).getTypeSpecificData(ModPowers.ZOMBIE.get()).ifPresent(d -> {
-                    if (d instanceof IZombieDataMixinHelper) {
-                        IZombieDataMixinHelper data = (IZombieDataMixinHelper) d;
-                        if (data.stoneLegacyAddon$getPreviousPowerType() != null) {
-                            if (data.stoneLegacyAddon$getPreviousData() != null) {
-                                ((INonStandPower) oldPower).givePower(data.stoneLegacyAddon$getPreviousPowerType());
-                                d.readNBT(data.stoneLegacyAddon$getPreviousDataNbt());
-                            }
+            ((INonStandPower) oldPower).getTypeSpecificData(ModPowers.ZOMBIE.get()).ifPresent(d -> {
+                if (d instanceof IZombieDataMixinHelper) {
+                    IZombieDataMixinHelper data = (IZombieDataMixinHelper) d;
+                    if (data.stoneLegacyAddon$getPreviousPowerType() != null) {
+                        if (data.stoneLegacyAddon$getPreviousData() != null) {
+                            keepPower(oldPower, wasDeath);
                         }
                     }
-                });
-            }
+                }
+            });
         }
     }
 }
