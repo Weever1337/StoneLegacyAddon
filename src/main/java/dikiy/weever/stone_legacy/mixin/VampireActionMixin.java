@@ -81,8 +81,6 @@ public class VampireActionMixin extends VampirismAction {
             if (!user.level.isClientSide) {
                 AddonPackets.sendToClientsTrackingAndSelf(new TrSyncGivePowerDataPacket(user.getId(), ModPowers.ZOMBIE.get().getRegistryName(), true), user);
             }
-//            nonPower.clear()
-//            nonPower.givePower(ModPowers.ZOMBIE.get())  ;
             nonPower.setEnergy((float) (Math.pow(1.6 * previousEnergy, 1.8) / Math.pow(previousMaxEnergy, 2)));
             stoneLegacyAddon$onEntityResurrect(user);
             user.setHealth(2f);
