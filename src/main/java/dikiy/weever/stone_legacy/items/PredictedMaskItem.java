@@ -39,9 +39,8 @@ public class PredictedMaskItem extends StoneMaskItem {
                     if (armorList.get(index) == stack) {
                         armorList.set(index, ItemStack.EMPTY);
                         entity.spawnAtLocation(mask);
-                    }
+                    } else ((PlayerEntity) entity).inventory.setItem(itemSlot, mask);
                 }
-                ((PlayerEntity) entity).inventory.setItem(itemSlot, mask);
             }
         }
     }
