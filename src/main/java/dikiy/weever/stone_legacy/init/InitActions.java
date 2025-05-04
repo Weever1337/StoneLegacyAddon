@@ -22,7 +22,7 @@ public class InitActions {
     public static final RegistryObject<PillarmanAction> PILLARMAN_PETRIFY = ACTIONS.register("pillarman_petrify",
             () -> new PillarmanPetrify(new NonStandAction.Builder()
                     .holdToFire(40, false)
-                    .heldWalkSpeed(0.5F)
+                    .heldWalkSpeed(0.0F)
                     .shiftVariationOf(ModPillarmanActions.PILLARMAN_STONE_FORM)
                     .ignoresPerformerStun()));
 

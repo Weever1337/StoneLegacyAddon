@@ -6,5 +6,8 @@
 
   "death.attack.asphyxia": "%1$s was petrified",
 
-  "action.stone_legacy.pillarman_hamon_suicide": "Hamon Suicide"
+  "action.stone_legacy.pillarman_hamon_suicide": "Hamon Suicide",
+  "action.stone_legacy.pillarman_petrify": "Petrify",
+
+  "stone_legacy.pillarman_petrify.warning": "Using this ability will clear your power!"
 }
