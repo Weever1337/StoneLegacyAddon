@@ -17,7 +17,6 @@ public class PillarmanPetrify extends PillarmanStoneForm
     @Override
     public ActionConditionResult checkSpecificConditions(LivingEntity user, INonStandPower power, ActionTarget target)
     {
-        System.out.println(StoneLegacyUtil.checkStoneFormationBehind(user));
         return ActionConditionResult.noMessage(StoneLegacyUtil.checkStoneFormationBehind(user));
     }
 }

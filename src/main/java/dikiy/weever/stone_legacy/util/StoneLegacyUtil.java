@@ -6,11 +6,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class StoneLegacyUtil
 {
     public static boolean checkStoneFormationBehind(LivingEntity livingEntity) {
-        if (livingEntity == null || livingEntity.level.isClientSide) {
+        if (livingEntity == null) {
             return false;
         }
 
@@ -20,9 +21,9 @@ public class StoneLegacyUtil
         Direction horizontalFacing = Direction.fromYRot(livingEntity.yRot);
         Direction horizontalBehind = horizontalFacing.getOpposite();
 
-        BlockPos anchorPos = playerPos.below().relative(horizontalBehind, 1);
-
-        for (int dy = 0; dy <= 1; dy++) {
+        BlockPos anchorPos = playerPos.relative(horizontalBehind, 1);
+        int stoneBlocksCounter = 0;
+        for (int dy = 0; dy < 3; dy++) {
             for (int dSide = -1; dSide <= 1; dSide++) {
 
                 BlockPos currentCheckPos;
@@ -35,12 +36,12 @@ public class StoneLegacyUtil
 
                 BlockState blockState = world.getBlockState(currentCheckPos);
 
-                if (!blockState.is(Blocks.STONE)) {
-                    return false;
+                if (blockState.is(Blocks.STONE)) {
+                    stoneBlocksCounter++;
                 }
             }
         }
 
-        return true;
+        return stoneBlocksCounter >= 6;
     }
 }
