@@ -6,7 +6,6 @@ import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import com.github.standobyte.jojo.power.impl.nonstand.NonStandPower;
 import com.github.standobyte.jojo.power.impl.nonstand.TypeSpecificData;
 import com.github.standobyte.jojo.power.impl.nonstand.type.NonStandPowerType;
-import com.github.standobyte.jojo.power.impl.nonstand.type.zombie.ZombieData;
 import dikiy.weever.stone_legacy.mixin_helper.INonStandPowerMixinHelper;
 import dikiy.weever.stone_legacy.mixin_helper.IZombieDataMixinHelper;
 import net.minecraft.entity.LivingEntity;

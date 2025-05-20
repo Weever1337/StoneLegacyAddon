@@ -1,10 +1,8 @@
 package dikiy.weever.stone_legacy.init;
 
 import com.github.standobyte.jojo.action.Action;
-import com.github.standobyte.jojo.action.non_stand.HamonLifeMagnetism;
 import com.github.standobyte.jojo.action.non_stand.NonStandAction;
 import com.github.standobyte.jojo.action.non_stand.PillarmanAction;
-import com.github.standobyte.jojo.action.non_stand.PillarmanRibsBlades;
 import com.github.standobyte.jojo.init.power.non_stand.pillarman.ModPillarmanActions;
 import com.github.standobyte.jojo.power.impl.nonstand.type.NonStandPowerType;
 import dikiy.weever.stone_legacy.StoneLegacyAddon;
