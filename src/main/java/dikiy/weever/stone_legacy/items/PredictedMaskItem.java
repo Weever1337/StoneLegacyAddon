@@ -17,6 +17,7 @@ import java.util.List;
 
 public class PredictedMaskItem extends StoneMaskItem {
     private final PillarmanData.Mode PREDICTED_MODE;
+
     public PredictedMaskItem(IArmorMaterial material, EquipmentSlotType slot, Properties builder, StoneMaskBlock block) {
         super(material, slot, builder, block);
         this.PREDICTED_MODE = builder.mode;
@@ -45,9 +46,13 @@ public class PredictedMaskItem extends StoneMaskItem {
         }
     }
 
-    public PillarmanData.Mode getMode() { return PREDICTED_MODE; }
+    public PillarmanData.Mode getMode() {
+        return PREDICTED_MODE;
+    }
+
     public static class Properties extends Item.Properties {
         private PillarmanData.Mode mode = PillarmanData.Mode.NONE;
+
         public Properties prediction(PillarmanData.Mode mode) {
             this.mode = mode;
             return this;

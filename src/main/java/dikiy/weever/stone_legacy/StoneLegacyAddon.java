@@ -25,6 +25,7 @@ public class StoneLegacyAddon {
 
         modEventBus.addListener(this::preInit);
     }
+
     private void initVanillaRegistries(IEventBus modEventBus) {
         InitActions.ACTIONS.register(modEventBus);
         InitBlocks.BLOCKS.register(modEventBus);

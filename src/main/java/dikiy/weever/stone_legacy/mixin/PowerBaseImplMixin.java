@@ -23,7 +23,8 @@ public abstract class PowerBaseImplMixin<P extends IPower<P, T>, T extends IPowe
     @Nonnull
     protected LivingEntity user;
 
-    @Shadow protected abstract void keepPower(P oldPower, boolean wasDeath);
+    @Shadow
+    protected abstract void keepPower(P oldPower, boolean wasDeath);
 
     @Inject(method = "onClone", at = @At("TAIL"), remap = false)
     public void keepPreviousPower(P oldPower, boolean wasDeath, CallbackInfo ci) {

@@ -24,10 +24,13 @@ import java.util.Optional;
 
 @Mixin(value = BleedingEffect.class, remap = false)
 public class BleedingEffectMixin extends Effect implements IApplicableEffect {
-    protected BleedingEffectMixin(EffectType type, int amp) { super(type, amp); }
-    @Shadow @Override
-    public boolean isApplicable(LivingEntity entity) { return false; }
-    @Shadow private static void applyMaskEffect(LivingEntity entity, ItemStack headStack) {}
+    protected BleedingEffectMixin(EffectType type, int amp) {
+        super(type, amp);
+    }
+
+    @Shadow
+    private static void applyMaskEffect(LivingEntity entity, ItemStack headStack) {
+    }
 
     @Inject(method = "applyStoneMask", at = @At(value = "INVOKE", target = "Lcom/github/standobyte/jojo/power/impl/nonstand/INonStandPower;getNonStandPowerOptional(Lnet/minecraft/entity/LivingEntity;)Lnet/minecraftforge/common/util/LazyOptional;"), cancellable = true, remap = false)
     private static void applyPredictedMask(LivingEntity entity, ItemStack headStack, CallbackInfoReturnable<Boolean> cir) {
@@ -67,5 +70,11 @@ public class BleedingEffectMixin extends Effect implements IApplicableEffect {
                 }
             }
         });
+    }
+
+    @Shadow
+    @Override
+    public boolean isApplicable(LivingEntity entity) {
+        return false;
     }
 }

@@ -10,7 +10,7 @@ authors = "${mod_authors}"
 logoFile="logo.png"
 credits="StandoByte"
 description='''
-An utility addon that does some survival-side changes to the power acquirement
+A utility addon that does some survival-side changes to the power acquirement
 '''
 [[dependencies.${mod_id}]]
     modId="forge"

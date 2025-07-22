@@ -74,7 +74,7 @@ public class FruitItem extends Item {
                 }
             }
             int eatDuration = item.getUseDuration(stack);
-            float lightLevel = world.dimensionType().hasSkyLight() && !world.dimensionType().hasCeiling()? livingEntity.getBrightness() : 0.0F;
+            float lightLevel = world.dimensionType().hasSkyLight() && !world.dimensionType().hasCeiling() ? livingEntity.getBrightness() : 0.0F;
             float lightDelay = lightLevel == 0 ? eatDuration - 2 : (eatDuration - 2) / lightLevel / 6;
             ItemStack[] hands = {mainHand, offHand};
             for (ItemStack hand : hands) {

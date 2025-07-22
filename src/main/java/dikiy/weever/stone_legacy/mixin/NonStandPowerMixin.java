@@ -21,6 +21,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class NonStandPowerMixin extends PowerBaseImpl<INonStandPower, NonStandPowerType<?>> implements INonStandPower, INonStandPowerMixinHelper {
     @Shadow
     private TypeSpecificData typeSpecificData;
+    @Shadow
+    private float energy;
 
     public NonStandPowerMixin(LivingEntity user) {
         super(user);
@@ -30,10 +32,12 @@ public abstract class NonStandPowerMixin extends PowerBaseImpl<INonStandPower, N
     private void setType(NonStandPowerType<?> powerType) {
     }
 
-    @Shadow private float energy;
+    @Shadow
+    public abstract void readNBT(CompoundNBT nbt);
 
-    @Shadow public abstract void readNBT(CompoundNBT nbt);
-    @Shadow private void setTypeSpecificData(TypeSpecificData data) {}
+    @Shadow
+    private void setTypeSpecificData(TypeSpecificData data) {
+    }
 
     @Override
     @Unique
@@ -51,6 +55,7 @@ public abstract class NonStandPowerMixin extends PowerBaseImpl<INonStandPower, N
         addHadPowerBefore(type);
         return true;
     }
+
     @Inject(method = "keepPower(Lcom/github/standobyte/jojo/power/impl/nonstand/INonStandPower;Z)V", at = @At("HEAD"), cancellable = true, remap = false)
     protected void restorePreviousPower(INonStandPower oldPower, boolean wasDeath, CallbackInfo ci) {
         if (oldPower.getType() == ModPowers.ZOMBIE.get() && wasDeath) {
