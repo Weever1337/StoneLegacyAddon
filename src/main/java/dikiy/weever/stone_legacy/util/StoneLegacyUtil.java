@@ -1,5 +1,7 @@
 package dikiy.weever.stone_legacy.util;
 
+import com.github.standobyte.jojo.block.PillarmanBossMultiBlock;
+import com.github.standobyte.jojo.init.ModBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
@@ -7,64 +9,59 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class StoneLegacyUtil
-{
+public class StoneLegacyUtil {
+
     public static boolean checkStoneFormationBehind(LivingEntity livingEntity) {
         if (livingEntity == null) {
             return false;
         }
         return getStoneBlocksCounter(livingEntity) >= 6;
     }
+
     private static int getStoneBlocksCounter(LivingEntity livingEntity) {
         World world = livingEntity.level;
-        BlockPos playerPos = new BlockPos(livingEntity.blockPosition());
+        Direction playerFacing = livingEntity.getDirection();
+        Direction behind = playerFacing.getOpposite();
+        Direction leftOfPlayer = playerFacing.getCounterClockWise();
+        BlockPos bottomLeftPos = livingEntity.blockPosition().relative(behind).relative(leftOfPlayer);
 
-        Direction horizontalFacing = Direction.fromYRot(livingEntity.yRot);
-        Direction horizontalBehind = horizontalFacing.getOpposite();
-        BlockPos anchorPos = playerPos.relative(horizontalBehind, 1);
         int stoneBlocksCounter = 0;
-        for (int dy = 0; dy < 3; dy++) {
-            for (int dSide = 0; dSide <= 1; dSide++) {
-                BlockPos currentCheckPos;
-
-                if (horizontalBehind.getAxis() == Direction.Axis.X) {
-                    currentCheckPos = anchorPos.offset(0, dy, dSide - (livingEntity.getZ() - Math.round(livingEntity.getZ())));
-                } else {
-                    currentCheckPos = anchorPos.offset(dSide - (livingEntity.getX() - Math.round(livingEntity.getX())), dy, 0);
-                }
-
-                BlockState blockState = world.getBlockState(currentCheckPos);
-
-                if (blockState.getMaterial() == Material.STONE) {
+        for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 2; i++) {
+                BlockPos posToCheck = bottomLeftPos.above(j).relative(playerFacing.getClockWise(), i);
+                if (world.getBlockState(posToCheck).getMaterial() == Material.STONE) {
                     stoneBlocksCounter++;
                 }
             }
         }
         return stoneBlocksCounter;
     }
+
     public static void replaceStoneWithSlumberingPillarman(LivingEntity living) {
-        if (getStoneBlocksCounter(living) < 6) return;
+        if (!checkStoneFormationBehind(living)) return;
+
         World world = living.level;
-        BlockPos playerPos = new BlockPos(living.blockPosition());
+        Direction playerFacing = living.getDirection();
+        Direction statueFacing = playerFacing.getOpposite();
+        Direction behind = playerFacing.getOpposite();
+        Direction leftOfPlayer = playerFacing.getCounterClockWise();
+        BlockPos bottomLeftPos = living.blockPosition().relative(behind).relative(leftOfPlayer);
 
-        Direction horizontalFacing = Direction.fromYRot(living.yRot);
-        Direction horizontalBehind = horizontalFacing.getOpposite();
-        BlockPos anchorPos = playerPos.relative(horizontalBehind, 1);
-        int stoneBlocksCounter = 0;
-        for (int dy = 3; dy > 0; dy--) {
-            for (int dSide = 1; dSide >= 0; dSide--) {
-                BlockPos currentCheckPos;
+        for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 2; i++) {
+                BlockPos posToReplace = bottomLeftPos.above(j).relative(playerFacing.getClockWise(), i);
 
-                if (horizontalBehind.getAxis() == Direction.Axis.X) {
-                    currentCheckPos = anchorPos.offset(0, dy, dSide - (living.getZ() - Math.round(living.getZ())));
-                } else {
-                    currentCheckPos = anchorPos.offset(dSide - (living.getX() - Math.round(living.getX())), dy, 0);
-                }
+                int yIndexInStructure = 2 - j;
+                int horizontalPartId = 1 - i;
+                int partId = yIndexInStructure * 2 + horizontalPartId;
 
-                BlockState blockState = world.getBlockState(currentCheckPos);
+                BlockState pillarmanState = ModBlocks.SLUMBERING_PILLARMAN.get().defaultBlockState()
+                        .setValue(PillarmanBossMultiBlock.FACING, statueFacing)
+                        .setValue(PillarmanBossMultiBlock.PART, partId);
 
-                if (blockState.getMaterial() == Material.STONE) {
-                    //place slumbering pillarman here with state from 0 to 5
+                if (world.getBlockState(posToReplace).getMaterial() == Material.STONE) {
+                    world.setBlock(posToReplace, pillarmanState, 3);
+                    world.getChunkSource().getLightEngine().checkBlock(posToReplace);
                 }
             }
         }
