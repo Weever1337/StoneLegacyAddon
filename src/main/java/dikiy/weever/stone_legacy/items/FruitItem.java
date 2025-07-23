@@ -61,27 +61,29 @@ public class FruitItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        if (!world.isClientSide() && stack.getItem() instanceof FruitItem) {
+        if (!world.isClientSide() && entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
-            ItemStack mainHand = livingEntity.getItemInHand(Hand.MAIN_HAND);
-            ItemStack offHand = livingEntity.getItemInHand(Hand.OFF_HAND);
-            FruitItem item = (FruitItem) stack.getItem();
-            if (stack != mainHand && stack != offHand) {
-                int stage = getStage(stack);
-                if (stage > 0) {
-                    stage -= 30;
-                    stack.getOrCreateTag().putInt("Stonefied", stage);
+
+            boolean isInHand = isSelected || livingEntity.getItemInHand(Hand.OFF_HAND) == stack;
+            int stage = getStage(stack);
+
+            if (isInHand) {
+                int eatDuration = this.getUseDuration(stack);
+                float lightLevel = world.dimensionType().hasSkyLight() && !world.dimensionType().hasCeiling() ? livingEntity.getBrightness() : 0.0F;
+
+                if (lightLevel > 0) {
+                    float lightDelay = (eatDuration - 2) / lightLevel / 6;
+                    if (lightDelay > 0) {
+                        stage = Math.min(stage + (int) (30 / lightDelay * 6), 630);
+                    }
                 }
-            }
-            int eatDuration = item.getUseDuration(stack);
-            float lightLevel = world.dimensionType().hasSkyLight() && !world.dimensionType().hasCeiling() ? livingEntity.getBrightness() : 0.0F;
-            float lightDelay = lightLevel == 0 ? eatDuration - 2 : (eatDuration - 2) / lightLevel / 6;
-            ItemStack[] hands = {mainHand, offHand};
-            for (ItemStack hand : hands) {
-                if (hand != null && hand.getItem() instanceof FruitItem) {
-                    int stage = getStage(hand);
-                    stage = Math.min(stage + (int) (30 / lightDelay * 6), 630);
-                    hand.getOrCreateTag().putInt("Stonefied", stage);
+
+                stack.getOrCreateTag().putInt("Stonefied", stage);
+
+            } else {
+                if (stage > 0) {
+                    stage = Math.max(0, stage - 30);
+                    stack.getOrCreateTag().putInt("Stonefied", stage);
                 }
             }
         }
