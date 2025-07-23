@@ -1,0 +1,13 @@
+{
+  "item.stone_legacy.fruit": "Каменный фрукт",
+  "block.stone_legacy.aja_stone_mask_predicted_heat": "Каменная маска с нагретым красным камнем Айя",
+  "block.stone_legacy.aja_stone_mask_predicted_light": "Каменная маска с просветлённым красным камнем Айя",
+  "block.stone_legacy.aja_stone_mask_predicted_wind": "Каменная маска с ветреным красным камнем Айя",
+
+  "death.attack.asphyxia": "%1$s был окаменён",
+
+  "action.stone_legacy.pillarman_hamon_suicide": "Самоубийство Хамоном",
+  "action.stone_legacy.pillarman_petrify": "Окаменение",
+
+  "stone_legacy.pillarman_petrify.warning": "Использование этой способности приведёт к потере вашей силы!"
+}

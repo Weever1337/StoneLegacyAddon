@@ -1,0 +1,13 @@
+{
+  "item.stone_legacy.fruit": "古老的果实",
+  "block.stone_legacy.aja_stone_mask_predicted_heat": "炎之流法石鬼面",
+  "block.stone_legacy.aja_stone_mask_predicted_light": "光之流法石鬼面",
+  "block.stone_legacy.aja_stone_mask_predicted_wind": "风之流法石鬼面",
+
+  "death.attack.asphyxia": "%1$s真正意义上变成了石头",
+
+  "action.stone_legacy.pillarman_hamon_suicide": "波纹自杀",
+  "action.stone_legacy.pillarman_petrify": "沉睡...",
+
+  "stone_legacy.pillarman_petrify.warning": "该技能用于变回人类，需要在背后有3x2的石头方块时才可使用"
+}
