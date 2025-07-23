@@ -4,6 +4,8 @@ import com.github.standobyte.jojo.action.ActionConditionResult;
 import com.github.standobyte.jojo.action.ActionTarget;
 import com.github.standobyte.jojo.action.non_stand.PillarmanStoneForm;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
+import com.github.standobyte.jojo.util.mc.MCUtil;
+import dikiy.weever.stone_legacy.util.PetrifyHandler;
 import dikiy.weever.stone_legacy.util.StoneLegacyUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,6 +47,7 @@ public class PillarmanPetrify extends PillarmanStoneForm {
                 serverWorld.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y, z, 40, 0.4, 0.8, 0.4, 0.02);
 
                 ((ServerPlayerEntity) user).connection.player = user.getServer().getPlayerList().respawn((ServerPlayerEntity) user, true);
+                PetrifyHandler.addPetrifyUser(user.getUUID(), System.currentTimeMillis() + 1000);
             }
         }
     }
