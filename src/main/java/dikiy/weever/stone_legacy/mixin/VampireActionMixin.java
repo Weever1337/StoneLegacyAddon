@@ -10,6 +10,7 @@ import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import com.github.standobyte.jojo.util.mc.MCUtil;
 import dikiy.weever.stone_legacy.capability.ZombieUtilProvider;
 import dikiy.weever.stone_legacy.mixin_helper.INonStandPowerMixinHelper;
+import dikiy.weever.stone_legacy.mixin_helper.IZombiesReminder;
 import dikiy.weever.stone_legacy.network.AddonPackets;
 import dikiy.weever.stone_legacy.network.server.TrResetDeathTimePacket;
 import dikiy.weever.stone_legacy.network.server.TrSyncGivePowerDataPacket;
@@ -44,11 +45,9 @@ public class VampireActionMixin extends VampirismAction {
                 if (spawned.get() < canSpawn) {
                     if (entity.deathTime >= 1) {
                         INonStandPower.getNonStandPowerOptional(entity).ifPresent(nonPower -> {
-                            if (nonPower.getType() == ModPowers.HAMON.get() && nonPower.getEnergy() < 5) {
+                            if (nonPower.getType() != ModPowers.HAMON.get() || nonPower.getEnergy() < 5) {
                                 stoneLegacyAddon$giveZombie(nonPower, user.getUUID());
-                                spawned.getAndIncrement();
-                            } else {
-                                stoneLegacyAddon$giveZombie(nonPower, user.getUUID());
+                                if (power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get() instanceof IZombiesReminder) ((IZombiesReminder) power).addZombie(entity);
                                 spawned.getAndIncrement();
                             }
                         });
@@ -61,6 +60,8 @@ public class VampireActionMixin extends VampirismAction {
                     zombie.setSummonedFromAbility();
                     zombie.copyPosition(user);
                     zombie.setOwner(user);
+                    if (power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get() instanceof IZombiesReminder)
+                        ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).addZombie(zombie);
                     world.addFreshEntity(zombie);
                 }
                 if (user instanceof ServerPlayerEntity) {

@@ -32,9 +32,9 @@ public abstract class WaitingZombieMixin extends ZombieEntity implements IWaitab
     @Final @Unique
     private static final DataParameter<Boolean> WAITING_DATA = EntityDataManager.defineId(WaitingZombieMixin.class, DataSerializers.BOOLEAN);
     @Unique
-    private boolean orderedToSit;
+    private boolean orderedToSit = false;
     @Unique
-    private boolean isSitting;
+    private boolean isSitting = false;
 
 
     @Shadow
