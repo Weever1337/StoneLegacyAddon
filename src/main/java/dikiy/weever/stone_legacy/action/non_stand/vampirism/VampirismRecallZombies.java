@@ -8,7 +8,6 @@ import dikiy.weever.stone_legacy.mixin_helper.IWaitableEntity;
 import dikiy.weever.stone_legacy.mixin_helper.IZombiesReminder;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;

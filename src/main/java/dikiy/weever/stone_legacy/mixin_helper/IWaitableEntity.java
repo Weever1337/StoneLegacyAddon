@@ -14,6 +14,8 @@ public interface IWaitableEntity {
     public boolean isOrderedToSit();
     @Unique
     public void setOrderedToSit(boolean isOrdered);
+    @Unique
+    void setOwner(LivingEntity owner);
 
     // wouldn't use it
     @Unique

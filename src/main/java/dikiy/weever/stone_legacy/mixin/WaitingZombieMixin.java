@@ -26,6 +26,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.UUID;
 
 @Mixin(value = HungryZombieEntity.class, remap = false)
 public abstract class WaitingZombieMixin extends ZombieEntity implements IWaitableEntity {
@@ -108,5 +110,14 @@ public abstract class WaitingZombieMixin extends ZombieEntity implements IWaitab
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
     public void defineMoreSyncedData(CallbackInfo ci) {
         this.entityData.define(WAITING_DATA, false);
+    }
+    @Shadow @Final static DataParameter<Optional<UUID>> OWNER_UUID;
+    @Shadow
+    private void setOwnerUUID(@Nullable UUID uuid) {
+        entityData.set(OWNER_UUID, Optional.ofNullable(uuid));
+    }
+    @Shadow
+    public void setOwner(LivingEntity owner) {
+        setOwnerUUID(owner != null ? owner.getUUID() : null);
     }
 }
