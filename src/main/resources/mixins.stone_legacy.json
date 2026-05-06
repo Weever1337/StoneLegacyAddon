@@ -13,6 +13,10 @@
     "PillarmanPowerTypeMixin",
     "PowerBaseImplMixin",
     "VampireActionMixin",
+    "WaitingZombieMixin",
     "ZombieDataMixin"
+  ],
+  "client": [
+    "client.HungryZombieWaitingPoseMixin"
   ]
 }

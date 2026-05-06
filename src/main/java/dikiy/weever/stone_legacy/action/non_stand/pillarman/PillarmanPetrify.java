@@ -4,7 +4,6 @@ import com.github.standobyte.jojo.action.ActionConditionResult;
 import com.github.standobyte.jojo.action.ActionTarget;
 import com.github.standobyte.jojo.action.non_stand.PillarmanStoneForm;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
-import com.github.standobyte.jojo.util.mc.MCUtil;
 import dikiy.weever.stone_legacy.util.PetrifyHandler;
 import dikiy.weever.stone_legacy.util.StoneLegacyUtil;
 import net.minecraft.entity.LivingEntity;
