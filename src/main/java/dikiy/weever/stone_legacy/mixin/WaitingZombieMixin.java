@@ -70,6 +70,7 @@ public abstract class WaitingZombieMixin extends ZombieEntity implements IWaitab
                     ItemStack oldStack = ((HungryZombieEntity)((Object)this)).getItemInHand(Hand.MAIN_HAND).getStack();
                     ItemStack newStack = player.getItemInHand(hand).getStack();
                     ((HungryZombieEntity)((Object)this)).setItemInHand(hand, newStack);
+                    ((HungryZombieEntity)((Object)this)).setGuaranteedDrop(EquipmentSlotType.MAINHAND);
                     if (!(oldStack.isEmpty() && player.abilities.instabuild))
                         player.setItemInHand(hand, oldStack);
                 } else if (player.getItemInHand(hand).getItem() instanceof ArmorItem) {
@@ -77,6 +78,7 @@ public abstract class WaitingZombieMixin extends ZombieEntity implements IWaitab
                     EquipmentSlotType slot = ((ArmorItem)player.getItemInHand(hand).getItem()).getSlot();
                     ItemStack oldStack = ((HungryZombieEntity)((Object)this)).getItemBySlot(slot);
                     ((HungryZombieEntity)((Object)this)).setItemSlot(slot, newStack);
+                    ((HungryZombieEntity)((Object)this)).setGuaranteedDrop(slot);
                     if (!(oldStack.isEmpty() && player.abilities.instabuild))
                         player.setItemInHand(hand, oldStack);
                 } else if (player.getItemInHand(hand).isEmpty() && player.isShiftKeyDown()) {
@@ -122,6 +124,8 @@ public abstract class WaitingZombieMixin extends ZombieEntity implements IWaitab
         }
         return super.hurt(source, damage);
     }
+
+
 
     public boolean removeWhenFarAway(double distanceFromPlayer) {
         return false;
