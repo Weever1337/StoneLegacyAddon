@@ -2,6 +2,8 @@ package dikiy.weever.stone_legacy.action.non_stand.vampirism;
 
 import com.github.standobyte.jojo.action.ActionTarget;
 import com.github.standobyte.jojo.action.non_stand.VampirismAction;
+import com.github.standobyte.jojo.entity.mob.HungryZombieEntity;
+import com.github.standobyte.jojo.init.ModEntityTypes;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
 import dikiy.weever.stone_legacy.mixin_helper.IWaitableEntity;
@@ -9,6 +11,8 @@ import dikiy.weever.stone_legacy.mixin_helper.IZombiesReminder;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.pathfinding.PathType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -44,6 +48,15 @@ public class VampirismRecallZombies extends VampirismAction {
                         position = position.add(Math.sqrt(4.0 * zombies_count / (2.0 * Math.PI)) * Math.cos(2 * Math.PI / zombies_count * i),
                                 0,
                                 Math.sqrt(4.0 * zombies_count / (2.0 * Math.PI)) * Math.sin(2 * Math.PI / zombies_count * i));
+//                        BlockPos blockPos = new BlockPos(position);
+                        // tf this doesn't work
+//                        while (!world.getBlockState(blockPos).isPathfindable(world, blockPos, PathType.LAND)) {
+//                            blockPos = blockPos.above();
+//                        }
+//                        while (world.getBlockState(blockPos).isPathfindable(world, blockPos, PathType.LAND)) {
+//                            blockPos = blockPos.below();
+//                        }
+//                        position.add(0, blockPos.getY() + world.getBlockState(blockPos).getCollisionShape(world, blockPos).bounds().maxY - position.y, 0);
                         zombie.moveTo(position);
                     }
                 }
