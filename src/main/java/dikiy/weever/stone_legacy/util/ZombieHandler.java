@@ -18,17 +18,18 @@ import java.util.Objects;
 public class ZombieHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onHurt(LivingAttackEvent event) {
-        LivingEntity hurtEntity = event.getEntityLiving();
+        LivingEntity target = event.getEntityLiving();
         DamageSource damageSource = event.getSource();
-        Entity damageEntity = damageSource.getEntity();
-        if (hurtEntity instanceof PlayerEntity && damageEntity instanceof LivingEntity) {
-            PlayerEntity player = getPlayerFromDamageEntity(damageEntity);
-            if (player == null || player == hurtEntity) {
+        Entity damaging = damageSource.getEntity();
+        if (target instanceof PlayerEntity && damaging instanceof LivingEntity) {
+            PlayerEntity player = getPlayerFromDamageEntity(damaging);
+            if (player == null || player == target) {
                 return;
             }
-            if (hurtEntity.getCapability(ZombieUtilProvider.CAPABILITY).map(cap -> Objects.equals(cap.getOwnerUUID(), hurtEntity.getUUID())).orElse(false)) {
-                event.setCanceled(true);
-            }
+            damaging.getCapability(ZombieUtilProvider.CAPABILITY).ifPresent(cap -> {
+                if (cap.getOwnerUUID().equals(target.getUUID())) {
+                    event.setCanceled(true);
+                }});
         }
     }
 
