@@ -31,36 +31,28 @@ public class VampirismRecallZombies extends VampirismAction {
         if (!world.isClientSide()) {
             if (power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).isPresent() &&
                 power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()  instanceof IZombiesReminder) {
-                List<UUID> missingEntities = ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).getOwnedZombies();
-                for (ServerWorld dim : world.getServer().getAllLevels()) {
-                    List<UUID> tmp = new ArrayList<>(missingEntities);
-                    missingEntities.forEach(e -> { if (dim.getEntity(e) != null || dim.getEntity(e) instanceof PlayerEntity) tmp.remove(e); });
-                    missingEntities = tmp;
-                }
-                missingEntities.forEach(e -> ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).removeZombie(e));
                 int zombies_count = ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).getOwnedZombies().size();
                 for (int i = 0; i < zombies_count; i++) {
                     LivingEntity zombie = (LivingEntity) ((ServerWorld) world).getEntity(((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).getOwnedZombies().get(i));
                     if (zombie != null) {
-                        // zombie.moveTo(user.position());
-                        //float rotation = (float) Math.PI / 180 * user.getViewYRot(1.0f);
                         Vector3d position = user.position();
                         position = position.add(Math.sqrt(4.0 * zombies_count / (2.0 * Math.PI)) * Math.cos(2 * Math.PI / zombies_count * i),
                                 0,
                                 Math.sqrt(4.0 * zombies_count / (2.0 * Math.PI)) * Math.sin(2 * Math.PI / zombies_count * i));
-//                        BlockPos blockPos = new BlockPos(position);
-                        // tf this doesn't work
-//                        while (!world.getBlockState(blockPos).isPathfindable(world, blockPos, PathType.LAND)) {
-//                            blockPos = blockPos.above();
-//                        }
-//                        while (world.getBlockState(blockPos).isPathfindable(world, blockPos, PathType.LAND)) {
-//                            blockPos = blockPos.below();
-//                        }
-//                        position.add(0, blockPos.getY() + world.getBlockState(blockPos).getCollisionShape(world, blockPos).bounds().maxY - position.y, 0);
                         zombie.moveTo(position);
                     }
                 }
             }
         }
+    }
+
+    private void removeNullEntities(World world, INonStandPower power) {
+        List<UUID> missingEntities = ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).getOwnedZombies();
+        for (ServerWorld dim : world.getServer().getAllLevels()) {
+            List<UUID> tmp = new ArrayList<>(missingEntities);
+            missingEntities.forEach(e -> { if (dim.getEntity(e) != null || dim.getEntity(e) instanceof PlayerEntity) tmp.remove(e); });
+            missingEntities = tmp;
+        }
+        missingEntities.forEach(e -> ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).removeZombie(e));
     }
 }
