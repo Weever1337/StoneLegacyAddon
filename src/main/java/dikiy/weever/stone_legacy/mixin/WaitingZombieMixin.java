@@ -76,7 +76,8 @@ public abstract class WaitingZombieMixin extends ZombieEntity implements IWaitab
                     EquipmentSlotType slot = ((ArmorItem)player.getItemInHand(hand).getItem()).getSlot();
                     ItemStack oldStack = this.getItemBySlot(slot);
                     this.setItemSlot(slot, newStack);
-                    player.setItemInHand(hand, oldStack);
+                    if (!(oldStack.isEmpty() && player.abilities.instabuild))
+                        player.setItemInHand(hand, oldStack);
                 } else if (player.getItemInHand(hand).isEmpty() && player.isShiftKeyDown()) {
                     this.getAllSlots().forEach(itemStack -> {
                         ItemEntity item = new ItemEntity(level, this.getX(), this.getEyeHeight() + this.getY(), this.getZ());
