@@ -35,9 +35,6 @@ public class VampirismRecallZombies extends VampirismAction {
                 missingEntities.forEach(e -> ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).removeZombie(e));
                 for (UUID zombieUUID : ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).getOwnedZombies()) {
                     if (((ServerWorld) world).getEntity(zombieUUID) != null) {
-                        if (((ServerWorld) world).getEntity(zombieUUID) instanceof IWaitableEntity) {
-                            ((IWaitableEntity)((ServerWorld) world).getEntity(zombieUUID)).setOrderedToSit(false);
-                        }
                         ((ServerWorld) world).getEntity(zombieUUID).moveTo(user.position());
                     }
                 }

@@ -1,10 +1,15 @@
 package dikiy.weever.stone_legacy.mixin;
 
 import com.github.standobyte.jojo.entity.mob.HungryZombieEntity;
+import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
+import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
+import com.github.standobyte.jojo.util.mc.MCUtil;
 import dikiy.weever.stone_legacy.mixin_helper.IWaitableEntity;
+import dikiy.weever.stone_legacy.mixin_helper.IZombiesReminder;
 import dikiy.weever.stone_legacy.mixin_helper.WaitGoal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -56,6 +61,12 @@ public abstract class WaitingZombieMixin extends ZombieEntity implements IWaitab
             if (player.level.isClientSide()) {
                 return ActionResultType.SUCCESS;
             } else {
+                INonStandPower.getNonStandPowerOptional(player).ifPresent(p -> {
+                    p.getTypeSpecificData(ModPowers.VAMPIRISM.get()).ifPresent(data -> {
+                        if (data instanceof IZombiesReminder && !((IZombiesReminder) data).getOwnedZombies().contains(this.getUUID()))
+                            ((IZombiesReminder) data).addZombie(this);
+                    });
+                });
                 setOrderedToSit(!isOrderedToSit());
                 this.jumping = false;
                 this.navigation.stop();
@@ -68,14 +79,27 @@ public abstract class WaitingZombieMixin extends ZombieEntity implements IWaitab
 
     @Override
     public boolean hurt(DamageSource source, float damage) {
-        if (!this.isInvulnerableTo(source)) {
+        if (!this.isInvulnerableTo(source) && source.getEntity() != null) {
             Entity entity = source.getEntity();
-            this.setOrderedToSit(false);
+            for (HungryZombieEntity zombie : MCUtil.entitiesAround(HungryZombieEntity.class, this,
+                    this.getAttributeValue(Attributes.FOLLOW_RANGE), true, e -> e.getOwner() == this.getOwner() && e instanceof IWaitableEntity)) {
+                ((IWaitableEntity)zombie).setOrderedToSit(false);
+            }
             if (entity != null && !(entity instanceof PlayerEntity) && !(entity instanceof AbstractArrowEntity)) {
                 damage = (damage + 1.0F) / 2.0F;
             }
         }
         return super.hurt(source, damage);
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceFromPlayer) {
+        return false;
+    }
+
+    @Override
+    public boolean requiresCustomPersistence() {
+        return true;
     }
 
     @Override @Unique

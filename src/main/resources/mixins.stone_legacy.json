@@ -13,6 +13,7 @@
     "PillarmanPowerTypeMixin",
     "PowerBaseImplMixin",
     "VampireActionMixin",
+    "VampirismDarkAuraFreeZombiesMixin",
     "VampirismZombiesReminderMixin",
     "WaitingZombieMixin",
     "ZombieDataMixin"
