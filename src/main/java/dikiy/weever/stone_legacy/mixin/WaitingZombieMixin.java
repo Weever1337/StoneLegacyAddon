@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -22,6 +23,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
@@ -37,13 +39,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Mixin(value = HungryZombieEntity.class)
-public abstract class WaitingZombieMixin implements IWaitableEntity {
+public abstract class WaitingZombieMixin extends ZombieEntity implements IWaitableEntity {
     @Final @Unique
     private static final DataParameter<Boolean> WAITING_DATA = EntityDataManager.defineId(HungryZombieEntity.class, DataSerializers.BOOLEAN);
     @Unique
     private boolean orderedToSit = false;
     @Unique
     private boolean isSitting = false;
+
+    public WaitingZombieMixin(World p_i1745_1_) { super(p_i1745_1_); }
 
 
     @Shadow
@@ -53,7 +57,7 @@ public abstract class WaitingZombieMixin implements IWaitableEntity {
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
     protected void registerMoreGoals(CallbackInfo ci) {
-        ((HungryZombieEntity)((Object)this)).goalSelector.addGoal(1, new WaitGoal(this));
+        ((HungryZombieEntity)((Object)this)).goalSelector.addGoal(1, new WaitGoal(((HungryZombieEntity)((Object)this))));
     }
 
     @NotNull
@@ -102,7 +106,7 @@ public abstract class WaitingZombieMixin implements IWaitableEntity {
                 }
             }
         }
-        return ((HungryZombieEntity)((Object)this)).mobInteract(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     public boolean hurt(DamageSource source, float damage) {
@@ -116,7 +120,7 @@ public abstract class WaitingZombieMixin implements IWaitableEntity {
                 damage = (damage + 1.0F) / 2.0F;
             }
         }
-        return ((HungryZombieEntity)((Object)this)).hurt(source, damage);
+        return super.hurt(source, damage);
     }
 
     public boolean removeWhenFarAway(double distanceFromPlayer) {

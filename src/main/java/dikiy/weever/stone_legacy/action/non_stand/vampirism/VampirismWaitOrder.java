@@ -19,7 +19,7 @@ public class VampirismWaitOrder extends VampirismAction {
    int range = 16 * world.getDifficulty().getId() - 8;
    for (HungryZombieEntity zombie : MCUtil.entitiesAround(HungryZombieEntity.class, user,
            range, true, e -> ((IWaitableEntity)e).getOwner() == user && e instanceof IWaitableEntity)) {
-    ((IWaitableEntity)zombie).setOrderedToSit(false);
+    ((IWaitableEntity)zombie).setOrderedToSit(true);
    }
   }
  }

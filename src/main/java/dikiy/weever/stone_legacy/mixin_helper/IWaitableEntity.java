@@ -18,14 +18,9 @@ public interface IWaitableEntity {
     void setOwner(LivingEntity owner);
 
     // wouldn't use it
-    @Unique
     boolean isInWaterOrBubble();
-    @Unique
     boolean isOnGround();
-    @Unique
     LivingEntity getOwner();
-    @Unique
     double distanceToSqr(Entity living);
-    @Unique
     PathNavigator getNavigation();
 }
