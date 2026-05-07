@@ -8,8 +8,10 @@ import com.github.standobyte.jojo.util.mc.MCUtil;
 import dikiy.weever.stone_legacy.mixin_helper.IZombiesReminder;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -76,15 +78,21 @@ public abstract class VampirismZombiesReminderMixin extends TypeSpecificData imp
                 }
             }
         }
-        CompoundNBT zombiesNBT = new CompoundNBT();
-        zombies.forEach(z -> zombiesNBT.putUUID("UUID", z));
+        ListNBT zombiesNBT = new ListNBT();
+        zombies.forEach(z -> {
+            CompoundNBT cnbt = new CompoundNBT();
+            cnbt.putUUID("UUID", z);
+            zombiesNBT.add(cnbt);
+        });
         nbt.put("OwnedZombies", zombiesNBT);
         return nbt;
     }
 
     @Inject(method = "readNBT", at = @At("TAIL"))
     public void readNBT(CompoundNBT nbt, CallbackInfo ci) {
-        for (int i = 0; i < nbt.getCompound("OwnedZombies").size(); i++)
-            zombies.add(nbt.getCompound("OwnedZombies").getUUID("UUID"));
+        ListNBT listNBT = nbt.getList("OwnedZombies", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < listNBT.size(); i++) {
+            zombies.add(listNBT.getCompound(i).getUUID("UUID"));
+        }
     }
 }

@@ -10,9 +10,12 @@ import dikiy.weever.stone_legacy.mixin_helper.WaitGoal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -21,6 +24,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -61,17 +65,43 @@ public abstract class WaitingZombieMixin extends ZombieEntity implements IWaitab
             if (player.level.isClientSide()) {
                 return ActionResultType.SUCCESS;
             } else {
-                INonStandPower.getNonStandPowerOptional(player).ifPresent(p -> {
-                    p.getTypeSpecificData(ModPowers.VAMPIRISM.get()).ifPresent(data -> {
-                        if (data instanceof IZombiesReminder && !((IZombiesReminder) data).getOwnedZombies().contains(this.getUUID()))
-                            ((IZombiesReminder) data).addZombie(this);
+                if (player.getItemInHand(hand).getItem() instanceof ToolItem || player.getItemInHand(hand).getItem() instanceof SwordItem) {
+                    ItemStack oldStack = this.getItemInHand(Hand.MAIN_HAND).getStack();
+                    ItemStack newStack = player.getItemInHand(hand).getStack();
+                    this.setItemInHand(hand, newStack);
+                    if (!(oldStack.isEmpty() && player.abilities.instabuild))
+                        player.setItemInHand(hand, oldStack);
+                } else if (player.getItemInHand(hand).getItem() instanceof ArmorItem) {
+                    ItemStack newStack = player.getItemInHand(hand).getStack();
+                    EquipmentSlotType slot = ((ArmorItem)player.getItemInHand(hand).getItem()).getSlot();
+                    ItemStack oldStack = this.getItemBySlot(slot);
+                    this.setItemSlot(slot, newStack);
+                    player.setItemInHand(hand, oldStack);
+                } else if (player.getItemInHand(hand).isEmpty() && player.isShiftKeyDown()) {
+                    this.getAllSlots().forEach(itemStack -> {
+                        ItemEntity item = new ItemEntity(level, this.getX(), this.getEyeHeight() + this.getY(), this.getZ());
+                        item.setItem(itemStack);
+                        ((ServerWorld)player.level).addFreshEntity(item);
                     });
-                });
-                setOrderedToSit(!isOrderedToSit());
-                this.jumping = false;
-                this.navigation.stop();
-                this.setTarget((LivingEntity) null);
-                return ActionResultType.SUCCESS;
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.AIR));
+                    this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.AIR));
+                    this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.AIR));
+                    this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.AIR));
+                    this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.AIR));
+                    this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.AIR));
+                } else  {
+                    INonStandPower.getNonStandPowerOptional(player).ifPresent(p -> {
+                        p.getTypeSpecificData(ModPowers.VAMPIRISM.get()).ifPresent(data -> {
+                            if (data instanceof IZombiesReminder && !((IZombiesReminder) data).getOwnedZombies().contains(this.getUUID()))
+                                ((IZombiesReminder) data).addZombie(this);
+                        });
+                    });
+                    setOrderedToSit(!isOrderedToSit());
+                    this.jumping = false;
+                    this.navigation.stop();
+                    this.setTarget((LivingEntity) null);
+                    return ActionResultType.SUCCESS;
+                }
             }
         }
         return super.mobInteract(player, hand);
