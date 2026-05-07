@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(PillarmanData.class)
+@Mixin(value = PillarmanData.class, remap = false)
 public abstract class PillarmanDataMixin extends TypeSpecificData {
     @Inject(method = "onPowerGiven", at = @At("HEAD"))
     public void onPowerGiven(NonStandPowerType<?> oldType, TypeSpecificData oldData, CallbackInfo ci) {

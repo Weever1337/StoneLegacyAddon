@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.function.Supplier;
 
-@Mixin(PillarmanPowerType.class)
+@Mixin(value = PillarmanPowerType.class, remap = false)
 public abstract class PillarmanPowerTypeMixin extends NonStandPowerType<PillarmanData> {
     public PillarmanPowerTypeMixin(Action<INonStandPower>[] startingAttacks, Action<INonStandPower>[] startingAbilities, Action<INonStandPower> defaultQuickAccess, Supplier<PillarmanData> dataFactory) {
         super(startingAttacks, startingAbilities, defaultQuickAccess, dataFactory);

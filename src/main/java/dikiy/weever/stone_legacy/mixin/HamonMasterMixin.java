@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(HamonMasterEntity.class)
+@Mixin(value = HamonMasterEntity.class, remap = false)
 public abstract class HamonMasterMixin extends MobEntity implements INPC, IMobPowerUser, IEntityAdditionalSpawnData {
 
     protected HamonMasterMixin(EntityType<? extends MobEntity> p_i48576_1_, World p_i48576_2_) {

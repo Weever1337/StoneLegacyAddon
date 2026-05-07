@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(JojoModUtil.class)
+@Mixin(value = JojoModUtil.class, remap = false)
 public abstract class NoBloodDrainFromZombiesMixin {
     @Inject(method = "isUndeadOrVampiric", at = @At(value = "HEAD"), cancellable = true)
     private static void getPower(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {

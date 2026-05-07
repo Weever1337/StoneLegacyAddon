@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(HamonData.class)
+@Mixin(value = HamonData.class, remap = false)
 public abstract class HamonDataMixin extends TypeSpecificData {
     @Inject(method = "setExerciseTicks", at = @At("HEAD"), cancellable = true)
     public void setExerciseTicks(int[] ticks, boolean clientSide, CallbackInfo ci) {

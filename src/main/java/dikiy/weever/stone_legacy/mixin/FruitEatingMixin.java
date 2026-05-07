@@ -1,20 +1,15 @@
 package dikiy.weever.stone_legacy.mixin;
 
-import com.github.standobyte.jojo.init.ModStatusEffects;
-import dikiy.weever.stone_legacy.init.InitItems;
 import dikiy.weever.stone_legacy.items.FruitItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -45,18 +40,18 @@ public abstract class FruitEatingMixin extends Entity {
     @Nullable
     public abstract EffectInstance getEffect(Effect p_70660_1_);
 
-    @Inject(method = "triggerItemUseEffects(Lnet/minecraft/item/ItemStack;I)V", at = @At(value = "HEAD", target = "Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/LivingEntity.isUsingItem()Z"), cancellable = true)
-    public void getHurtSoundAndAnimation(ItemStack stack, int randomValue, CallbackInfo ci) {
-        if (stack.getItem() == InitItems.FRUIT.get() && this.isUsingItem() && FruitItem.getStage(stack) == 630) {
-            this.spawnItemParticles(stack, 1);
-            if (!(this.getEffect(Effects.DAMAGE_RESISTANCE) != null || (this.getEntity() instanceof PlayerEntity && ((PlayerEntity) this.getEntity()).isCreative()))) {
-                this.playSound(SoundEvents.PLAYER_HURT, 0.5F + 0.5F * (float) this.random.nextInt(2), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-                int amplifier = this.getEffect(ModStatusEffects.BLEEDING.get()) != null ? this.getEffect(ModStatusEffects.BLEEDING.get()).getAmplifier() + 1 : 0;
-                this.addEffect(new EffectInstance(ModStatusEffects.BLEEDING.get(), 45, amplifier, false, false, true));
-                ci.cancel();
-            }
-        }
-    }
+//    @Inject(method = "triggerItemUseEffects(Lnet/minecraft/item/ItemStack;I)V", at = @At(value = "HEAD", target = "Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/LivingEntity.isUsingItem()Z"), cancellable = true)
+//    public void getHurtSoundAndAnimation(ItemStack stack, int randomValue, CallbackInfo ci) {
+//        if (stack.getItem() == InitItems.FRUIT.get() && this.isUsingItem() && FruitItem.getStage(stack) == 630) {
+//            this.spawnItemParticles(stack, 1);
+//            if (!(this.getEffect(Effects.DAMAGE_RESISTANCE) != null || (this.getEntity() instanceof PlayerEntity && ((PlayerEntity) this.getEntity()).isCreative()))) {
+//                this.playSound(SoundEvents.PLAYER_HURT, 0.5F + 0.5F * (float) this.random.nextInt(2), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+//                int amplifier = this.getEffect(ModStatusEffects.BLEEDING.get()) != null ? this.getEffect(ModStatusEffects.BLEEDING.get()).getAmplifier() + 1 : 0;
+//                this.addEffect(new EffectInstance(ModStatusEffects.BLEEDING.get(), 45, amplifier, false, false, true));
+//                ci.cancel();
+//            }
+//        }
+//    }
 
     @Inject(method = "spawnItemParticles(Lnet/minecraft/item/ItemStack;I)V", at = @At(value = "HEAD"), cancellable = true)
     public void spawnTeethParticles(ItemStack stack, int particles, CallbackInfo ci) {

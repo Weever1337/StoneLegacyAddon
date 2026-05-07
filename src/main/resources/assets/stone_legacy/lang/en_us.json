@@ -12,6 +12,7 @@
   "stone_legacy.pillarman_petrify.warning": "Using this ability will clear your power!",
 
   "action.stone_legacy.vampirism_recall": "Recall",
+  "action.stone_legacy.vampirism_wait_order": "Wait Order",
 
   "commands.jojozombie.setowner.success.single": "Owner %s set successfully to %s",
   "commands.jojozombie.setowner.success.multiple": "Owner %s set successfully to %s entities"

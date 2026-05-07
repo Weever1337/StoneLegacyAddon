@@ -2,17 +2,12 @@ package dikiy.weever.stone_legacy.action.non_stand.vampirism;
 
 import com.github.standobyte.jojo.action.ActionTarget;
 import com.github.standobyte.jojo.action.non_stand.VampirismAction;
-import com.github.standobyte.jojo.entity.mob.HungryZombieEntity;
-import com.github.standobyte.jojo.init.ModEntityTypes;
 import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
-import dikiy.weever.stone_legacy.mixin_helper.IWaitableEntity;
 import dikiy.weever.stone_legacy.mixin_helper.IZombiesReminder;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.pathfinding.PathType;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;

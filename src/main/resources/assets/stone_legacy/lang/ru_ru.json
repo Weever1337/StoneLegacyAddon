@@ -12,6 +12,7 @@
   "stone_legacy.pillarman_petrify.warning": "Использование этой способности приведёт к потере вашей силы!",
 
   "action.stone_legacy.vampirism_recall": "Подозвать",
+  "action.stone_legacy.vampirism_wait_order": "\"Сидеть\"",
 
   "commands.jojozombie.setowner.success.single": "Владелец %s успешно установлен для %s",
   "commands.jojozombie.setowner.success.multiple": "Владелец %s успешно установлен для %s сущностей"

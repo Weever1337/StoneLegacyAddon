@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Mixin(VampirismZombieSummon.class)
+@Mixin(value = VampirismZombieSummon.class, remap = false)
 public class VampireActionMixin extends VampirismAction {
     public VampireActionMixin(Builder builder) {
         super(builder);

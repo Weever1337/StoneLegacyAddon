@@ -11,6 +11,7 @@ import dikiy.weever.stone_legacy.StoneLegacyAddon;
 import dikiy.weever.stone_legacy.action.non_stand.pillarman.PillarmanHamonSuicide;
 import dikiy.weever.stone_legacy.action.non_stand.pillarman.PillarmanPetrify;
 import dikiy.weever.stone_legacy.action.non_stand.vampirism.VampirismRecallZombies;
+import dikiy.weever.stone_legacy.action.non_stand.vampirism.VampirismWaitOrder;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 
@@ -32,5 +33,12 @@ public class InitActions {
 
 
     public static final RegistryObject<VampirismAction> VAMPIRISM_RECALL = ACTIONS.register("vampirism_recall",
-            () -> new VampirismRecallZombies(new NonStandAction.Builder().shiftVariationOf(ModVampirismActions.VAMPIRISM_ZOMBIE_SUMMON)));
+            () -> new VampirismRecallZombies(new NonStandAction.Builder()
+                    .cooldown(60)
+                    .shiftVariationOf(ModVampirismActions.VAMPIRISM_ZOMBIE_SUMMON)));
+
+    public static final RegistryObject<VampirismAction> VAMPIRISM_WAIT_ORDER = ACTIONS.register("vampirism_wait_order",
+            () -> new VampirismWaitOrder(new NonStandAction.Builder()
+                    .cooldown(30)
+                    .shiftVariationOf(ModVampirismActions.VAMPIRISM_DARK_AURA)));
 }
