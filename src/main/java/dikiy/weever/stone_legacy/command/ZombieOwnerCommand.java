@@ -47,14 +47,16 @@ public class ZombieOwnerCommand {
                         }
                     }));
                     ++i;
-                } else if (entity.getCapability(ZombieUtilProvider.CAPABILITY).isPresent()) {
+                } else {
                     entity.getCapability(ZombieUtilProvider.CAPABILITY).ifPresent(cap -> {
                         LivingEntity oldOwner = (LivingEntity) source.getLevel().getEntity(cap.getOwnerUUID());
-                        INonStandPower.getNonStandPowerOptional(oldOwner).ifPresent(power -> power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).ifPresent(data -> {
-                            if (data instanceof IZombiesReminder) {
-                                ((IZombiesReminder) data).removeZombie((LivingEntity) entity);
-                            }
-                        }));
+                        if (oldOwner != null) {
+                            INonStandPower.getNonStandPowerOptional(oldOwner).ifPresent(power -> power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).ifPresent(data -> {
+                                if (data instanceof IZombiesReminder) {
+                                    ((IZombiesReminder) data).removeZombie((LivingEntity) entity);
+                                }
+                            }));
+                        }
                         cap.setOwnerUUID(owner.getUUID());
                         INonStandPower.getNonStandPowerOptional(owner).ifPresent(power -> power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).ifPresent(data -> {
                             if (data instanceof IZombiesReminder) {
@@ -71,9 +73,9 @@ public class ZombieOwnerCommand {
             throw ERROR_ENTITY_FAIL.create();
         } else {
             if (i == 1) {
-                source.sendSuccess(new TranslationTextComponent("commands.jojozombie.setowner.success.single", targets.iterator().next().getDisplayName(), owner.getDisplayName()), true);
+                source.sendSuccess(new TranslationTextComponent("commands.jojozombie.setowner.success.single", owner.getDisplayName(), targets.iterator().next().getDisplayName()), true);
             } else {
-                source.sendSuccess(new TranslationTextComponent("commands.jojozombie.setowner.success.multiple", i, owner.getDisplayName()), true);
+                source.sendSuccess(new TranslationTextComponent("commands.jojozombie.setowner.success.multiple", owner.getDisplayName(), i), true);
             }
         }
 
