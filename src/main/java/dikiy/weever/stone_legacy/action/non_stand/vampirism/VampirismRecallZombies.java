@@ -9,6 +9,7 @@ import dikiy.weever.stone_legacy.mixin_helper.IZombiesReminder;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import org.jetbrains.annotations.Nullable;
@@ -33,9 +34,17 @@ public class VampirismRecallZombies extends VampirismAction {
                     missingEntities = tmp;
                 }
                 missingEntities.forEach(e -> ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).removeZombie(e));
-                for (UUID zombieUUID : ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).getOwnedZombies()) {
-                    if (((ServerWorld) world).getEntity(zombieUUID) != null) {
-                        ((ServerWorld) world).getEntity(zombieUUID).moveTo(user.position());
+                int zombies_count = ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).getOwnedZombies().size();
+                for (int i = 0; i < zombies_count; i++) {
+                    LivingEntity zombie = (LivingEntity) ((ServerWorld) world).getEntity(((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).getOwnedZombies().get(i));
+                    if (zombie != null) {
+                        // zombie.moveTo(user.position());
+                        //float rotation = (float) Math.PI / 180 * user.getViewYRot(1.0f);
+                        Vector3d position = user.position();
+                        position = position.add(Math.sqrt(4.0 * zombies_count / (2.0 * Math.PI)) * Math.cos(2 * Math.PI / zombies_count * i),
+                                0,
+                                Math.sqrt(4.0 * zombies_count / (2.0 * Math.PI)) * Math.sin(2 * Math.PI / zombies_count * i));
+                        zombie.moveTo(position);
                     }
                 }
             }
