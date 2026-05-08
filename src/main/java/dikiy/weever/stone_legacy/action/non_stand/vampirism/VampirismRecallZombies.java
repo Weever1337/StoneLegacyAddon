@@ -26,14 +26,14 @@ public class VampirismRecallZombies extends VampirismAction {
         if (!world.isClientSide()) {
             if (power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).isPresent() &&
                 power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()  instanceof IZombiesReminder) {
-                int zombies_count = ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).getOwnedZombies().size();
-                for (int i = 0; i < zombies_count; i++) {
-                    LivingEntity zombie = (LivingEntity) ((ServerWorld) world).getEntity(((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).getOwnedZombies().get(i));
+                List<UUID> reachable_zombies = removeNullEntities(world, power);
+                for (int i = 0; i < reachable_zombies.size(); i++) {
+                    LivingEntity zombie = (LivingEntity) ((ServerWorld) world).getEntity((reachable_zombies.get(i)));
                     if (zombie != null) {
                         Vector3d position = user.position();
-                        position = position.add(Math.sqrt(4.0 * zombies_count / (2.0 * Math.PI)) * Math.cos(2 * Math.PI / zombies_count * i),
-                                0,
-                                Math.sqrt(4.0 * zombies_count / (2.0 * Math.PI)) * Math.sin(2 * Math.PI / zombies_count * i));
+                        double offset_x = Math.sqrt(4.0 * reachable_zombies.size() / (2.0 * Math.PI)) * Math.cos(2 * Math.PI / reachable_zombies.size() * i);
+                        double offset_z = Math.sqrt(4.0 * reachable_zombies.size() / (2.0 * Math.PI)) * Math.sin(2 * Math.PI / reachable_zombies.size() * i);
+                        position = position.add(offset_x, 0, offset_z);
                         zombie.moveTo(position);
                     }
                 }
@@ -41,13 +41,20 @@ public class VampirismRecallZombies extends VampirismAction {
         }
     }
 
-    private void removeNullEntities(World world, INonStandPower power) {
-        List<UUID> missingEntities = ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).getOwnedZombies();
-        for (ServerWorld dim : world.getServer().getAllLevels()) {
-            List<UUID> tmp = new ArrayList<>(missingEntities);
-            missingEntities.forEach(e -> { if (dim.getEntity(e) != null || dim.getEntity(e) instanceof PlayerEntity) tmp.remove(e); });
-            missingEntities = tmp;
+    private List<UUID> removeNullEntities(World world, INonStandPower power) {
+        if (power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).map(d -> ((IZombiesReminder)d).getOwnedZombies()).isPresent()) {
+            List<UUID> missingEntities = ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).getOwnedZombies();
+            for (ServerWorld dim : world.getServer().getAllLevels()) {
+                List<UUID> tmp = new ArrayList<>(missingEntities);
+                missingEntities.forEach(e -> {
+                    if (dim.getEntity(e) != null || dim.getEntity(e) instanceof PlayerEntity) tmp.remove(e);
+                });
+                missingEntities = tmp;
+            }
+            List<UUID> result = new ArrayList<>(power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).map(d -> ((IZombiesReminder) d).getOwnedZombies()).get());
+            missingEntities.forEach(result::remove);
+            return result;
         }
-        missingEntities.forEach(e -> ((IZombiesReminder) power.getTypeSpecificData(ModPowers.VAMPIRISM.get()).get()).removeZombie(e));
+        return new ArrayList<>();
     }
 }
