@@ -25,7 +25,7 @@ public class ZombieHandler {
                 return;
             }
             damaging.getCapability(ZombieUtilProvider.CAPABILITY).ifPresent(cap -> {
-                if (cap.getOwnerUUID().equals(target.getUUID())) {
+                if (target.getUUID().equals(cap.getOwnerUUID())) {
                     event.setCanceled(true);
                 }});
         }
