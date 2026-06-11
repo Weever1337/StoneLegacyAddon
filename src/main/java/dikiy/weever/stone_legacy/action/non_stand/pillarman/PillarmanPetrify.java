@@ -34,20 +34,19 @@ public class PillarmanPetrify extends PillarmanStoneForm {
 
     @Override
     protected void perform(World world, LivingEntity user, INonStandPower power, ActionTarget target) {
-        if (user instanceof PlayerEntity) {
-            if (!world.isClientSide() && world instanceof ServerWorld) {
-                ServerWorld serverWorld = (ServerWorld) world;
+        if (user instanceof ServerPlayerEntity && !world.isClientSide() && world instanceof ServerWorld) {
+            ServerPlayerEntity player = (ServerPlayerEntity) user;
+            ServerWorld serverWorld = (ServerWorld) world;
 
-                StoneLegacyUtil.replaceStoneWithSlumberingPillarman(user);
+            StoneLegacyUtil.replaceStoneWithSlumberingPillarman(player);
 
-                double x = user.getX();
-                double y = user.getY() + user.getBbHeight() / 2.0;
-                double z = user.getZ();
-                serverWorld.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y, z, 40, 0.4, 0.8, 0.4, 0.02);
+            double x = player.getX();
+            double y = player.getY() + player.getBbHeight() / 2.0;
+            double z = player.getZ();
+            serverWorld.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y, z, 40, 0.4, 0.8, 0.4, 0.02);
 
-                ((ServerPlayerEntity) user).connection.player = user.getServer().getPlayerList().respawn((ServerPlayerEntity) user, true);
-                PetrifyHandler.addPetrifyUser(user.getUUID(), System.currentTimeMillis() + 1000);
-            }
+            StoneLegacyUtil.resetToRespawnPoint(player);
+            PetrifyHandler.addPetrifyUser(player.getUUID(), System.currentTimeMillis() + 1000);
         }
     }
 

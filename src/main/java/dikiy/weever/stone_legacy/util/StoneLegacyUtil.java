@@ -5,9 +5,16 @@ import com.github.standobyte.jojo.init.ModBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Direction;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+
+import java.util.Optional;
 
 public class StoneLegacyUtil {
 
@@ -65,5 +72,43 @@ public class StoneLegacyUtil {
                 }
             }
         }
+    }
+
+    public static void resetToRespawnPoint(ServerPlayerEntity player) {
+        MinecraftServer server = player.getServer();
+        if (server == null) return;
+
+        RegistryKey<World> respawnDimension = player.getRespawnDimension();
+        BlockPos respawnPos = player.getRespawnPosition();
+        float respawnAngle = player.getRespawnAngle();
+        boolean respawnForced = player.isRespawnForced();
+
+        ServerWorld respawnWorld = server.getLevel(respawnDimension);
+        Optional<Vector3d> respawnLocation = Optional.empty();
+        if (respawnWorld != null && respawnPos != null) {
+            respawnLocation = ServerPlayerEntity.findRespawnPositionAndUseSpawnBlock(respawnWorld, respawnPos, respawnAngle, respawnForced, true);
+        }
+
+        ServerWorld targetWorld = (respawnWorld != null && respawnLocation.isPresent()) ? respawnWorld : server.overworld();
+
+        double x;
+        double y;
+        double z;
+        float yaw = respawnAngle;
+        if (respawnLocation.isPresent()) {
+            Vector3d location = respawnLocation.get();
+            x = location.x;
+            y = location.y;
+            z = location.z;
+        }
+        else {
+            BlockPos sharedSpawn = targetWorld.getSharedSpawnPos();
+            x = sharedSpawn.getX() + 0.5D;
+            y = sharedSpawn.getY();
+            z = sharedSpawn.getZ() + 0.5D;
+            yaw = 0.0F;
+        }
+
+        player.teleportTo(targetWorld, x, y, z, yaw, 0.0F);
     }
 }
